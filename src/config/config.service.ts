@@ -78,6 +78,10 @@ export class ConfigService {
     return this.get('TINKOFF_TERMINAL_PASSWORD');
   }
 
+  isDev(): boolean {
+    return this.get('MODE') === 'DEV';
+  }
+
   getLang(): string {
     return this.get('LANG');
   }
