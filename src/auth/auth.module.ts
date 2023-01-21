@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { configService } from 'src/config/config.service';
 import { AuthController } from './auth.controller';
+import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
 
 @Module({
   imports: [
@@ -15,8 +16,8 @@ import { AuthController } from './auth.controller';
       signOptions: { expiresIn: configService.getAccessTokenExpiresIn() },
     }),
   ],
-  providers: [AuthService],
-  exports: [AuthService],
+  providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
+  exports: [AuthService],
 })
 export class AuthModule {}
