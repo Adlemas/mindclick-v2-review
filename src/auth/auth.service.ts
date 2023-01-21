@@ -1,13 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { from, Observable, of, switchMap } from 'rxjs';
-import { User } from 'src/schemas/user.schema';
+import { User, UserDocument } from 'src/schemas/user.schema';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   @Inject(UsersService)
   private readonly usersService: UsersService;
+
+  @Inject(JwtService)
+  private readonly jwtService: JwtService;
 
   validateUser(
     email: string,
@@ -30,5 +34,15 @@ export class AuthService {
         return null;
       }),
     );
+  }
+
+  login(user: UserDocument) {
+    const payload = {
+      email: user.email,
+      sub: user._id,
+    };
+    return {
+      accessToken: this.jwtService.sign(payload),
+    };
   }
 }
