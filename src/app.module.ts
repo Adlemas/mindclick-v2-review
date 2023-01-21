@@ -4,9 +4,22 @@ import { AppService } from './app.service';
 import { ConfigModule } from 'src/config/config.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigService } from 'src/config/config.service';
 
 @Module({
-  imports: [ConfigModule, AuthModule, UsersModule],
+  imports: [
+    ConfigModule,
+    AuthModule,
+    UsersModule,
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.getMongoUri(),
+      }),
+      inject: [ConfigService],
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
