@@ -4,6 +4,7 @@ import { from, Observable, of, switchMap } from 'rxjs';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { Payload } from 'src/auth/interface/payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -37,9 +38,9 @@ export class AuthService {
   }
 
   login(user: UserDocument) {
-    const payload = {
+    const payload: Payload = {
       email: user.email,
-      sub: user._id,
+      sub: user._id.toString(),
     };
     return {
       accessToken: this.jwtService.sign(payload),
