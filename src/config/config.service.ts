@@ -78,3 +78,5 @@ export class ConfigService {
     return this.get('TINKOFF_TERMINAL_PASSWORD');
   }
 }
+
+export const configService = new ConfigService();
