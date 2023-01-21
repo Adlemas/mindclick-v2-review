@@ -77,6 +77,10 @@ export class ConfigService {
   getTinkoffSecretKey(): string {
     return this.get('TINKOFF_TERMINAL_PASSWORD');
   }
+
+  getLang(): string {
+    return this.get('LANG');
+  }
 }
 
 export const configService = new ConfigService();
