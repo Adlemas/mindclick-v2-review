@@ -41,14 +41,11 @@ export class AuthService {
   login(user: LoginDto): Observable<any> {
     return from(this.validateUser(user.email, user.password)).pipe(
       switchMap((user) => {
-        if (user) {
-          const payload: Payload = {
-            email: user.email,
-            sub: user._id.toString(),
-          };
-          return of(payload);
-        }
-        throw new NotFoundException('Invalid credentials');
+        const payload: Payload = {
+          email: user.email,
+          sub: user._id.toString(),
+        };
+        return of(payload);
       }),
     );
   }
