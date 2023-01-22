@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
+  Param,
   Post,
   Put,
   Req,
@@ -15,6 +17,10 @@ import { Roles } from 'src/users/decorator/roles.decorator';
 import { Role } from 'src/enum/role.enum';
 import { CreateGroupDto } from 'src/groups/dto/create-group.dto';
 import { UpdateGroupDto } from 'src/groups/dto/update-group.dto';
+import {
+  RemoveGroupDto,
+  RemoveGroupParamsDto,
+} from 'src/groups/dto/remove-group.dto';
 
 @Controller('groups')
 export class GroupsController {
@@ -42,6 +48,19 @@ export class GroupsController {
     return this.groupsService.updateGroupByOwner(req.user, {
       groupId: updateGroupDto.groupId,
       name: updateGroupDto.name,
+    });
+  }
+
+  @Roles(Role.TEACHER)
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Delete(':groupId')
+  removeGroup(
+    @Req() req,
+    @Param() { groupId }: RemoveGroupParamsDto,
+    @Body() removeGroupDto: RemoveGroupDto,
+  ) {
+    return this.groupsService.removeGroupByOwner(req.user, groupId, {
+      newGroupId: removeGroupDto.newGroupId,
     });
   }
 }
