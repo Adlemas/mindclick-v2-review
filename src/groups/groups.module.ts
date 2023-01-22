@@ -11,6 +11,6 @@ import { Group, GroupSchema } from 'src/schemas/group.schema';
   ],
   providers: [GroupsService, GroupRepository],
   controllers: [GroupsController],
-  exports: [GroupsService],
+  exports: [GroupsService, GroupRepository],
 })
 export class GroupsModule {}
