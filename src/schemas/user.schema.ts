@@ -1,10 +1,9 @@
-import mongoose, { HydratedDocument, now } from 'mongoose';
+import { HydratedDocument, now, Schema as MongooseSchema } from 'mongoose';
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Role } from 'src/enum/role.enum';
 import { Portfolio } from 'src/interface/portfolio.interface';
 import { Monetization } from 'src/interface/monetization.interface';
 import { Plan } from 'src/interface/plan.interface';
-import { Group } from 'src/schemas/group.schema';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -14,7 +13,7 @@ export type UserDocument = HydratedDocument<User>;
   },
 })
 export class User {
-  _id: string;
+  _id: MongooseSchema.Types.ObjectId;
 
   @Prop({
     type: String,
@@ -125,16 +124,6 @@ export class User {
     default: [],
   })
   portfolio: Array<Portfolio>;
-
-  @Prop({
-    type: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Group',
-      },
-    ],
-  })
-  groups: Array<Group>;
 
   // centres: Array<Centre>;
 
