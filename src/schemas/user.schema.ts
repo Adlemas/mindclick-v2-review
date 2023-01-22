@@ -180,6 +180,9 @@ export class User {
     default: now(),
   })
   createdAt: Date;
+
+  @Prop()
+  refreshToken?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
