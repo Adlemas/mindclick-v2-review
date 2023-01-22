@@ -55,7 +55,11 @@ export class GroupRepository {
     groupId: Schema.Types.ObjectId,
     updateGroupDto: UpdateGroupDto,
   ) {
-    return from(this.groupModel.findByIdAndUpdate(groupId, updateGroupDto));
+    return from(
+      this.groupModel.findByIdAndUpdate(groupId, updateGroupDto, {
+        new: true,
+      }),
+    );
   }
 
   updateGroupByOwner(
