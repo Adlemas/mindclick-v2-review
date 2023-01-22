@@ -31,7 +31,17 @@ export class UsersController {
   @UseGuards(AccessTokenGuard)
   @Post('users')
   create(@Req() req, @Body() dto: CreateUserDto) {
-    return this.usersService.create(req.user, dto);
+    return this.usersService.create(req.user, {
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      birthDate: dto.birthDate,
+      phone: dto.phone,
+      groupId: dto.groupId,
+      password: dto.password,
+      email: dto.email,
+      points: dto.points,
+      rate: dto.rate,
+    });
   }
 
   @UseGuards(AccessTokenGuard)
