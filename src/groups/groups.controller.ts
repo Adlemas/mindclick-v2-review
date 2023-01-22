@@ -39,6 +39,9 @@ export class GroupsController {
   @UseGuards(AccessTokenGuard, RolesGuard)
   @Put()
   updateGroup(@Req() req, @Body() updateGroupDto: UpdateGroupDto) {
-    return this.groupsService.updateGroupByOwner(req.user, updateGroupDto);
+    return this.groupsService.updateGroupByOwner(req.user, {
+      groupId: updateGroupDto.groupId,
+      name: updateGroupDto.name,
+    });
   }
 }
