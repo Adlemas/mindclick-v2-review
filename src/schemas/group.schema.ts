@@ -8,6 +8,8 @@ export type GroupDocument = HydratedDocument<any>;
   timestamps: true,
 })
 export class Group {
+  _id: mongoose.Schema.Types.ObjectId;
+
   @Prop({
     type: String,
     required: true,
