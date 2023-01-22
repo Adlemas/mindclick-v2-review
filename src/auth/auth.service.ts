@@ -6,10 +6,13 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Payload } from 'src/auth/interface/payload.interface';
 import { LoginDto } from 'src/auth/dto/login.dto';
-import { I18nContext } from 'nestjs-i18n';
+import { LocaleService } from 'src/locale/locale.service';
 
 @Injectable()
 export class AuthService {
+  @Inject(LocaleService)
+  private readonly localeService: LocaleService;
+
   @Inject(UsersService)
   private readonly usersService: UsersService;
 
@@ -20,7 +23,6 @@ export class AuthService {
     email: string,
     pass: string,
   ): Observable<Omit<User, 'password'>> {
-    const i18n = I18nContext.current();
     return from(this.usersService.findOne(email)).pipe(
       switchMap((user) => {
         if (user && user.password === pass) {
@@ -35,7 +37,9 @@ export class AuthService {
             }),
           );
         }
-        throw new NotFoundException(i18n.t('auth.notFound'));
+        throw new NotFoundException(
+          this.localeService.translate('auth.notFound'),
+        );
       }),
     );
   }
