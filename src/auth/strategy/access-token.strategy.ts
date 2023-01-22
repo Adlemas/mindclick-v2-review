@@ -2,12 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { configService } from 'src/config/config.service';
-import { Payload } from 'src/auth/interface/payload.interface';
+import { JwtPayload } from 'src/auth/interface/jwt-payload.interface';
 import { from, of, switchMap } from 'rxjs';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class AccessTokenStrategy extends PassportStrategy(Strategy) {
   @Inject(UsersService)
   private readonly usersService: UsersService;
 
@@ -19,7 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: Payload) {
+  validate(payload: JwtPayload) {
     return from(this.usersService.findOne(payload.email)).pipe(
       switchMap((user) => {
         if (user) {
