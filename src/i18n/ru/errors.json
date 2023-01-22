@@ -5,5 +5,5 @@
   "group_not_found": "Группа не найдена",
   "email_exists": "Пользователь с таким email уже существует",
   "user_not_found": "Пользователь не найден",
-  "group_is_not_empty": "Группа не пуста"
+  "group_not_empty": "Группа не пуста"
 }
