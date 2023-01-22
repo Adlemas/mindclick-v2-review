@@ -70,11 +70,7 @@ export class GroupRepository {
       switchMap((group) => {
         if (!group) {
           throw new NotFoundException(
-            this.localeService.translate('errors.not_found', {
-              args: {
-                target: 'Группа',
-              },
-            }),
+            this.localeService.translate('errors.group_not_found'),
           );
         }
         return this.updateGroupById(group._id, updateGroupDto);
