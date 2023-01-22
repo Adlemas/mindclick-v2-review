@@ -9,6 +9,7 @@ import { ConfigService } from 'src/config/config.service';
 import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
 import * as path from 'path';
 import { UserLocaleResolver } from 'src/lib/resolvers/user-locale.resolver';
+import { LocaleModule } from './locale/locale.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { UserLocaleResolver } from 'src/lib/resolvers/user-locale.resolver';
       }),
       inject: [ConfigService],
     }),
+    LocaleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
