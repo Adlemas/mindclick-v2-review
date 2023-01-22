@@ -2,11 +2,12 @@ import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { Model, Schema } from 'mongoose';
-import { from, Observable, switchMap } from 'rxjs';
+import { from, Observable, of, switchMap } from 'rxjs';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { GroupRepository } from 'src/groups/repository/group.repository';
 import { LocaleService } from 'src/locale/locale.service';
+import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/role.enum';
 
 @Injectable()
@@ -23,21 +24,41 @@ export class UserRepository {
   createUser(
     userId: Schema.Types.ObjectId,
     createUserDto: CreateUserDto,
-  ): Observable<User> {
-    return from(
-      this.groupRepository.findUserGroup(userId, createUserDto.groupId),
-    ).pipe(
-      switchMap((group) => {
-        if (!group) {
+  ): Observable<Omit<User, 'password'>> {
+    return from(this.userModel.findOne({ email: createUserDto.email })).pipe(
+      switchMap((userExists) => {
+        if (userExists) {
           throw new ForbiddenException(
-            this.localeService.translate('errors.forbidden'),
+            this.localeService.translate('errors.email_exists'),
           );
         }
         return from(
-          this.userModel.create({
-            ...createUserDto,
-            role: Role.STUDENT,
-            group: group._id,
+          this.groupRepository.findUserGroup(userId, createUserDto.groupId),
+        ).pipe(
+          switchMap((group) => {
+            if (!group) {
+              throw new ForbiddenException(
+                this.localeService.translate('errors.forbidden'),
+              );
+            }
+            return from(bcrypt.hash(createUserDto.password, 10)).pipe(
+              switchMap((hashedPassword) => {
+                return from(
+                  this.userModel.create({
+                    ...createUserDto,
+                    password: hashedPassword,
+                    role: Role.STUDENT,
+                    group: group._id,
+                  }),
+                ).pipe(
+                  switchMap((createdUser) => {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    const { password, ...user } = createdUser.toObject();
+                    return of(user);
+                  }),
+                );
+              }),
+            );
           }),
         );
       }),
