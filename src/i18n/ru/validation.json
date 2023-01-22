@@ -1,5 +1,7 @@
 {
   "NOT_EMPTY": "{property} не может быть пустым",
   "NOT_STRING": "{property} должен быть строкой",
-  "INVALID_EMAIL": "Email недействителен"
+  "INVALID_EMAIL": "Email недействителен",
+  "NOT_PHONE_NUMBER": "Номер телефона недействителен",
+  "NOT_DATE": "{property} должен быть датой"
 }

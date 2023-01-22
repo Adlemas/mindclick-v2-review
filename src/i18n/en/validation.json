@@ -1,5 +1,7 @@
 {
   "NOT_EMPTY": "{property} cannot be empty",
   "NOT_STRING": "{property} must be a string",
-  "INVALID_EMAIL": "Email is invalid"
+  "INVALID_EMAIL": "Email is invalid",
+  "NOT_PHONE_NUMBER": "Phone number is invalid",
+  "NOT_DATE": "{property} must be a date"
 }
