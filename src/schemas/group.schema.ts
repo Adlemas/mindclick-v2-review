@@ -21,6 +21,13 @@ export class Group {
   maxMembers: number;
 
   @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: User.name,
+  })
+  owner: mongoose.Schema.Types.ObjectId;
+
+  @Prop({
     type: [
       {
         type: mongoose.Schema.Types.ObjectId,
