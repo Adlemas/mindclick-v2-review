@@ -40,7 +40,9 @@ export class AuthService {
                 const { password, ...result } = user.toObject();
                 return of(result);
               }
-              throw new BadRequestException('auth.incPass');
+              throw new BadRequestException(
+                this.localeService.translate('auth.incPass'),
+              );
             }),
           );
         }
