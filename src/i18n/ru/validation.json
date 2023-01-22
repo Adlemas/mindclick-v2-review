@@ -4,5 +4,6 @@
   "INVALID_EMAIL": "Email недействителен",
   "NOT_PHONE_NUMBER": "Номер телефона недействителен",
   "NOT_DATE": "{property} должен быть датой",
-  "NOT_NUMBER": "{property} должен быть числом"
+  "NOT_NUMBER": "{property} должен быть числом",
+  "NOT_MONGO_ID": "{property} недействительный идентификатор"
 }
