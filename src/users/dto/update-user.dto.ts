@@ -1,6 +1,19 @@
-import { IsDate, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsNotEmpty,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { Type } from 'class-transformer';
+import { Schema } from 'mongoose';
+
+export class UpdateUserParamDto {
+  @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
+  @IsNotEmpty({ message: i18nValidationMessage('validation.NOT_EMPTY') })
+  id: Schema.Types.ObjectId;
+}
 
 export class UpdateUserDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
@@ -15,24 +28,24 @@ export class UpdateUserDto {
     message: i18nValidationMessage('validation.NOT_PHONE_NUMBER'),
   })
   @IsOptional()
-  phone?: string | null;
+  phone?: string;
 
   @Type(() => Date)
   @IsDate({ message: i18nValidationMessage('validation.NOT_DATE') })
   @IsOptional()
-  birthDate?: Date | null;
+  birthDate?: Date;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsOptional()
-  description?: string | null;
+  description?: string;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsOptional()
-  city?: string | null;
+  city?: string;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsOptional()
-  address?: string | null;
+  address?: string;
 
   refreshToken?: string;
 }
