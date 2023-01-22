@@ -5,6 +5,8 @@ import { GroupRepository } from 'src/groups/repository/group.repository';
 import { CreateGroupDto } from 'src/groups/dto/create-group.dto';
 import { Group } from 'src/schemas/group.schema';
 import { UpdateGroupDto } from 'src/groups/dto/update-group.dto';
+import { Schema } from 'mongoose';
+import { RemoveGroupDto } from 'src/groups/dto/remove-group.dto';
 
 @Injectable()
 export class GroupsService {
@@ -37,6 +39,20 @@ export class GroupsService {
           user._id,
           updateGroupDto,
         );
+      }),
+    );
+  }
+
+  removeGroupByOwner(
+    user: Observable<User>,
+    groupId: Schema.Types.ObjectId,
+    removeGroupDto: RemoveGroupDto,
+  ) {
+    return user.pipe(
+      switchMap((user) => {
+        return this.groupRepository.removeGroupById(user._id, groupId, {
+          newGroupId: removeGroupDto.newGroupId,
+        });
       }),
     );
   }
