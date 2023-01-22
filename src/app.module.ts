@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from 'src/config/config.service';
 import { LocaleModule } from './locale/locale.module';
+import { GroupsModule } from './groups/groups.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { LocaleModule } from './locale/locale.module';
       }),
       inject: [ConfigService],
     }),
+    GroupsModule,
   ],
   providers: [AppService],
 })
