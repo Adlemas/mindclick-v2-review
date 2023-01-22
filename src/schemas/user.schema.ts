@@ -1,9 +1,14 @@
-import { HydratedDocument, now, Schema as MongooseSchema } from 'mongoose';
+import mongoose, {
+  HydratedDocument,
+  now,
+  Schema as MongooseSchema,
+} from 'mongoose';
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Role } from 'src/enum/role.enum';
 import { Portfolio } from 'src/interface/portfolio.interface';
 import { Monetization } from 'src/interface/monetization.interface';
 import { Plan } from 'src/interface/plan.interface';
+import { Group } from 'src/schemas/group.schema';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -169,6 +174,12 @@ export class User {
     default: now(),
   })
   createdAt: Date;
+
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Group.name,
+  })
+  group: mongoose.Schema.Types.ObjectId;
 
   @Prop()
   refreshToken?: string;
