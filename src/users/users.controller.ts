@@ -4,6 +4,7 @@ import {
   Get,
   Inject,
   Param,
+  Post,
   Put,
   Req,
   UseGuards,
@@ -19,11 +20,19 @@ import { User } from 'src/schemas/user.schema';
 import { Roles } from 'src/users/decorator/roles.decorator';
 import { Role } from 'src/enum/role.enum';
 import { RolesGuard } from 'src/users/guard/roles.guard';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Controller()
 export class UsersController {
   @Inject(UsersService)
   private readonly usersService: UsersService;
+
+  @Roles(Role.TEACHER)
+  @UseGuards(AccessTokenGuard)
+  @Post('users')
+  create(@Req() req, @Body() dto: CreateUserDto) {
+    return this.usersService.create(req.user, dto);
+  }
 
   @UseGuards(AccessTokenGuard)
   @Put('myprofile')
