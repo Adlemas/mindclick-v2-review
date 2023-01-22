@@ -13,7 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from 'src/auth/dto/login.dto';
 import { LocaleService } from 'src/locale/locale.service';
 import { Tokens } from 'src/auth/interface/tokens.interface';
-import { Promise } from 'mongoose';
+import { Promise, Schema } from 'mongoose';
 import { configService } from 'src/config/config.service';
 
 @Injectable()
@@ -97,7 +97,7 @@ export class AuthService {
     );
   }
 
-  updateRefreshToken(userId: string, refreshToken: string) {
+  updateRefreshToken(userId: Schema.Types.ObjectId, refreshToken: string) {
     return from(bcrypt.hash(refreshToken, 10)).pipe(
       switchMap((hash) => {
         return from(
@@ -107,7 +107,7 @@ export class AuthService {
     );
   }
 
-  getTokens(userId: string, email: string): Observable<Tokens> {
+  getTokens(userId: Schema.Types.ObjectId, email: string): Observable<Tokens> {
     return from(
       Promise.all([
         this.jwtService.signAsync(

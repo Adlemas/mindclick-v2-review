@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from 'src/schemas/user.schema';
-import { Model } from 'mongoose';
+import { Model, Schema } from 'mongoose';
 import { from, Observable, switchMap } from 'rxjs';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 
@@ -17,7 +17,10 @@ export class UsersService {
     return from(this.userModel.findById(id).exec());
   }
 
-  updateOne(id: string, data: UpdateUserDto): Observable<UserDocument> {
+  updateOne(
+    id: Schema.Types.ObjectId,
+    data: UpdateUserDto,
+  ): Observable<UserDocument> {
     return from(
       this.userModel
         .findByIdAndUpdate(id, data, {
