@@ -1,4 +1,5 @@
 {
   "forbidden": "Not allowed",
-  "unauthorized": "Not authenticated"
+  "unauthorized": "Not authenticated",
+  "not_found": "{target} not found"
 }

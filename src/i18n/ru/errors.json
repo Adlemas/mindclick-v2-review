@@ -1,4 +1,5 @@
 {
   "forbidden": "Доступ запрещен",
-  "unauthorized": "Не авторизован"
+  "unauthorized": "Не авторизован",
+  "not_found": "{target} не найден(а)"
 }
