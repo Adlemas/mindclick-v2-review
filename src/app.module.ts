@@ -6,13 +6,11 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from 'src/config/config.service';
-import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
-import * as path from 'path';
-import { UserLocaleResolver } from 'src/lib/resolvers/user-locale.resolver';
 import { LocaleModule } from './locale/locale.module';
 
 @Module({
   imports: [
+    LocaleModule,
     ConfigModule,
     AuthModule,
     UsersModule,
@@ -23,19 +21,6 @@ import { LocaleModule } from './locale/locale.module';
       }),
       inject: [ConfigService],
     }),
-    I18nModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        fallbackLanguage: configService.getLang(),
-        loaderOptions: {
-          path: path.join(__dirname, `/i18n/`),
-          watch: configService.isDev(),
-        },
-        resolvers: [UserLocaleResolver, AcceptLanguageResolver],
-      }),
-      inject: [ConfigService],
-    }),
-    LocaleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
