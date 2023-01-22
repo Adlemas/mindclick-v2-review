@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Inject,
   Injectable,
   NotFoundException,
@@ -61,6 +62,33 @@ export class AuthService {
             return this.updateRefreshToken(user._id, tokens.refreshToken).pipe(
               switchMap(() => {
                 return of(tokens);
+              }),
+            );
+          }),
+        );
+      }),
+    );
+  }
+
+  refreshTokens(userId: string, refreshToken: string): Observable<Tokens> {
+    return from(this.usersService.findById(userId)).pipe(
+      switchMap((user) => {
+        if (!user || !user.refreshToken) {
+          throw new ForbiddenException(
+            this.localeService.translate('errors.FORBIDDEN'),
+          );
+        }
+        return from(bcrypt.compare(refreshToken, user.refreshToken)).pipe(
+          switchMap((matches) => {
+            if (!matches) {
+              throw new ForbiddenException('errors.FORBIDDEN');
+            }
+            return this.getTokens(user._id, user.email).pipe(
+              switchMap((tokens) => {
+                return this.updateRefreshToken(
+                  user._id,
+                  tokens.refreshToken,
+                ).pipe(switchMap(() => of(tokens)));
               }),
             );
           }),
