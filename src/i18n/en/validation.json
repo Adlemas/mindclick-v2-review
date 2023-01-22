@@ -3,5 +3,6 @@
   "NOT_STRING": "{property} must be a string",
   "INVALID_EMAIL": "Email is invalid",
   "NOT_PHONE_NUMBER": "Phone number is invalid",
-  "NOT_DATE": "{property} must be a date"
+  "NOT_DATE": "{property} must be a date",
+  "NOT_NUMBER": "{property} must be a number"
 }
