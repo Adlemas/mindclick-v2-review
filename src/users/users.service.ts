@@ -1,43 +1,35 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from 'src/schemas/user.schema';
-import { Model, Schema } from 'mongoose';
-import { from, Observable, switchMap } from 'rxjs';
+import { Inject, Injectable } from '@nestjs/common';
+import { User } from 'src/schemas/user.schema';
+import { Observable, switchMap } from 'rxjs';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { UserRepository } from 'src/users/repository/user.repository';
+import { Schema } from 'mongoose';
 
 @Injectable()
 export class UsersService {
-  @InjectModel(User.name) private userModel: Model<UserDocument>;
+  @Inject(UserRepository)
+  private readonly userRepository: UserRepository;
 
-  findOne(email: string): Observable<UserDocument> {
-    return from(this.userModel.findOne({ email }).exec());
+  findOne(filter: Partial<User>) {
+    return this.userRepository.findOne(filter);
   }
 
-  findById(id: string): Observable<UserDocument> {
-    return from(this.userModel.findById(id).exec());
+  findById(userId: Schema.Types.ObjectId) {
+    return this.userRepository.findById(userId);
   }
 
-  updateOne(
-    id: Schema.Types.ObjectId,
-    data: UpdateUserDto,
-  ): Observable<UserDocument> {
-    return from(
-      this.userModel
-        .findByIdAndUpdate(id, data, {
-          new: true,
-        })
-        .exec(),
-    );
+  updateById(userId: Schema.Types.ObjectId, updateUserDto: UpdateUserDto) {
+    return this.userRepository.updateById(userId, updateUserDto);
   }
 
   update(user: User | Observable<User>, dto: UpdateUserDto) {
     if (user instanceof Observable) {
       return user.pipe(
         switchMap((u) => {
-          return this.updateOne(u._id, dto);
+          return this.userRepository.updateById(u._id, dto);
         }),
       );
     }
-    return this.updateOne(user._id, user);
+    return this.userRepository.updateById(user._id, user);
   }
 }
