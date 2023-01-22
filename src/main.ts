@@ -7,6 +7,7 @@ import {
   I18nValidationExceptionFilter,
   I18nMiddleware,
 } from 'nestjs-i18n';
+import { UnauthorizedExceptionFilter } from 'src/filters/unauthorized-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,6 +18,7 @@ async function bootstrap() {
     new I18nValidationExceptionFilter({
       detailedErrors: false,
     }),
+    new UnauthorizedExceptionFilter(),
   );
 
   app.useGlobalPipes(
