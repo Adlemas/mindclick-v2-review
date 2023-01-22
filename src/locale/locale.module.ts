@@ -2,7 +2,6 @@ import { Global, Module } from '@nestjs/common';
 import { LocaleService } from './locale.service';
 import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
 import { ConfigService } from 'src/config/config.service';
-import { UserLocaleResolver } from 'src/lib/resolvers/user-locale.resolver';
 import * as path from 'path';
 
 @Global()
@@ -16,7 +15,7 @@ import * as path from 'path';
           watch: configService.isDev(),
         },
       }),
-      resolvers: [AcceptLanguageResolver, UserLocaleResolver],
+      resolvers: [AcceptLanguageResolver],
       inject: [ConfigService],
     }),
   ],
