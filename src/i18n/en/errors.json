@@ -1,5 +1,6 @@
 {
   "forbidden": "Not allowed",
   "unauthorized": "Not authenticated",
-  "not_found": "{target} not found"
+  "not_found": "{target} not found",
+  "group_not_found": "Group not found"
 }

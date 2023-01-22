@@ -1,5 +1,6 @@
 {
   "forbidden": "Доступ запрещен",
   "unauthorized": "Не авторизован",
-  "not_found": "{target} не найден(а)"
+  "not_found": "{target} не найден(а)",
+  "group_not_found": "Группа не найдена"
 }
