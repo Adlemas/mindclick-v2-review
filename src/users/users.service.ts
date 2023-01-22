@@ -11,4 +11,8 @@ export class UsersService {
   findOne(email: string): Observable<UserDocument> {
     return from(this.userModel.findOne({ email }).exec());
   }
+
+  updateOne(id: string, data: Partial<User>): Observable<UserDocument> {
+    return from(this.userModel.findByIdAndUpdate(id, data).exec());
+  }
 }
