@@ -26,6 +26,10 @@ export class ConfigService {
     return this.get('JWT_SECRET');
   }
 
+  getRefreshJwtSecret(): string {
+    return this.get('REFRESH_TOKEN_SECRET');
+  }
+
   getAccessTokenExpiresIn(): string {
     return this.get('ACCESS_TOKEN_EXPIRES_IN');
   }
