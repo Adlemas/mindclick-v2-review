@@ -34,6 +34,22 @@ export class UsersService {
     return this.userRepository.updateById(user._id, user);
   }
 
+  getGroupUsersCount(groupId: Schema.Types.ObjectId) {
+    return this.userRepository.getGroupUsersCount(groupId);
+  }
+
+  moveAllUsersToGroup(
+    userId: Schema.Types.ObjectId,
+    groupId: Schema.Types.ObjectId,
+    targetGroupId: Schema.Types.ObjectId,
+  ) {
+    return this.userRepository.moveAllUsersToGroup(
+      userId,
+      groupId,
+      targetGroupId,
+    );
+  }
+
   create(user: Observable<User>, dto: CreateUserDto) {
     return user.pipe(
       switchMap((u) => {
