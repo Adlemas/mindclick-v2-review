@@ -2,10 +2,16 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from 'src/config/config.service';
 import { ValidationPipe } from '@nestjs/common';
-import { I18nValidationPipe, I18nValidationExceptionFilter } from 'nestjs-i18n';
+import {
+  I18nValidationPipe,
+  I18nValidationExceptionFilter,
+  I18nMiddleware,
+} from 'nestjs-i18n';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(I18nMiddleware);
 
   app.useGlobalFilters(
     new I18nValidationExceptionFilter({
