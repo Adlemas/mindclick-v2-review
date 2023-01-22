@@ -1,3 +1,4 @@
 {
-  "FORBIDDEN": "Not allowed"
+  "forbidden": "Not allowed",
+  "unauthorized": "Not authenticated"
 }
