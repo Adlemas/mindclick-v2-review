@@ -23,7 +23,11 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy) {
     return from(this.usersService.findOne(payload.email)).pipe(
       switchMap((user) => {
         if (user) {
-          return of(user);
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { password, ...result } = user.toObject();
+          return of({
+            ...result,
+          });
         }
         throw new Error('User not found');
       }),
