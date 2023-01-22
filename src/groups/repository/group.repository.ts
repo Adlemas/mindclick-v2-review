@@ -40,7 +40,7 @@ export class GroupRepository {
   findUserGroup(
     userId: Schema.Types.ObjectId,
     groupId: Schema.Types.ObjectId,
-  ): Observable<Group> {
+  ): Observable<Group | null> {
     return this.findGroupById(groupId).pipe(
       switchMap((group) => {
         if (group && group.owner.toString() === userId.toString()) {
