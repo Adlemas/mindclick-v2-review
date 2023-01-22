@@ -5,7 +5,10 @@ import { Request } from 'express';
 import { configService } from 'src/config/config.service';
 
 @Injectable()
-export class RefreshTokenStrategy extends PassportStrategy(Strategy) {
+export class RefreshTokenStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-refresh',
+) {
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
