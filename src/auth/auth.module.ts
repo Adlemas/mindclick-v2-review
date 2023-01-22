@@ -5,7 +5,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { configService } from 'src/config/config.service';
 import { AuthController } from './auth.controller';
-import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
+import { AccessTokenStrategy } from 'src/auth/strategy/access-token.strategy';
+import { RefreshTokenStrategy } from 'src/auth/strategy/refresh-token.strategy';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
       signOptions: { expiresIn: configService.getAccessTokenExpiresIn() },
     }),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })
