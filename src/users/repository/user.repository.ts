@@ -1,9 +1,4 @@
-import {
-  ForbiddenException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { Model, Schema } from 'mongoose';
@@ -29,14 +24,11 @@ export class UserRepository {
     userId: Schema.Types.ObjectId,
     createUserDto: CreateUserDto,
   ): Observable<User> {
-    return from(this.groupRepository.findGroupById(createUserDto.groupId)).pipe(
+    return from(
+      this.groupRepository.findUserGroup(userId, createUserDto.groupId),
+    ).pipe(
       switchMap((group) => {
         if (!group) {
-          throw new NotFoundException(
-            this.localeService.translate('errors.group_not_found'),
-          );
-        }
-        if (group.owner.toString() !== userId.toString()) {
           throw new ForbiddenException(
             this.localeService.translate('errors.forbidden'),
           );
