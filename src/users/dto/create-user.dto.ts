@@ -1,6 +1,7 @@
 import {
   IsDate,
   IsEmail,
+  IsMongoId,
   IsNumber,
   IsPhoneNumber,
   IsString,
@@ -29,15 +30,7 @@ export class CreateUserDto {
   birthDate: Date;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
-  description: string;
-
-  @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
-  city: string;
-
-  @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
-  address: string;
-
-  @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
+  @IsMongoId({ message: i18nValidationMessage('validation.NOT_MONGO_ID') })
   groupId: Schema.Types.ObjectId;
 
   @IsNumber({}, { message: i18nValidationMessage('validation.NOT_NUMBER') })
@@ -45,4 +38,7 @@ export class CreateUserDto {
 
   @IsNumber({}, { message: i18nValidationMessage('validation.NOT_NUMBER') })
   points: number;
+
+  @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
+  password: string;
 }
