@@ -4,6 +4,7 @@ import { Observable, switchMap } from 'rxjs';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { UserRepository } from 'src/users/repository/user.repository';
 import { Schema } from 'mongoose';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -31,5 +32,13 @@ export class UsersService {
       );
     }
     return this.userRepository.updateById(user._id, user);
+  }
+
+  create(user: Observable<User>, dto: CreateUserDto) {
+    return user.pipe(
+      switchMap((u) => {
+        return this.userRepository.createUser(u._id, dto);
+      }),
+    );
   }
 }
