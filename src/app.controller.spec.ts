@@ -21,7 +21,7 @@ describe('AppController', () => {
       };
 
       expect(
-        appController.profile({
+        appController.getProfile({
           user: testUser,
         }),
       ).toBe(testUser);
