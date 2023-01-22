@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Inject,
+  Param,
   Put,
   Req,
   UseGuards,
@@ -12,6 +13,9 @@ import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { AccessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { Observable } from 'rxjs';
 import { User } from 'src/schemas/user.schema';
+import { Roles } from 'src/users/decorator/roles.decorator';
+import { Role } from 'src/enum/role.enum';
+import { RolesGuard } from 'src/users/guard/roles.guard';
 
 @Controller()
 export class UsersController {
@@ -19,7 +23,7 @@ export class UsersController {
   private readonly usersService: UsersService;
 
   @UseGuards(AccessTokenGuard)
-  @Put('users')
+  @Put('myprofile')
   update(@Req() req, @Body() dto: UpdateUserDto) {
     const user = req.user as Observable<User>;
     return this.usersService.update(user, {
@@ -37,5 +41,17 @@ export class UsersController {
   @Get('myprofile')
   getProfile(@Req() req) {
     return req.user;
+  }
+
+  @Roles(Role.TEACHER)
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Put('users/:id')
+  updateById(@Param('id') id: string, @Body() dto: UpdateUserDto) {
+    return this.usersService.updateOne(id, {
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      birthDate: dto.birthDate,
+      phone: dto.phone,
+    });
   }
 }
