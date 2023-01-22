@@ -25,12 +25,12 @@ export class AuthService {
   ): Observable<Omit<User, 'password'>> {
     return from(this.usersService.findOne(email)).pipe(
       switchMap((user) => {
-        if (user && user.password === pass) {
+        if (user) {
           return from(bcrypt.compare(pass, user.password)).pipe(
             switchMap((isMatch) => {
               if (isMatch) {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const { password, ...result } = user;
+                const { password, ...result } = user.toObject();
                 return of(result);
               }
               return of(null);
@@ -51,7 +51,7 @@ export class AuthService {
           email: user.email,
           sub: user._id.toString(),
         };
-        return of(payload);
+        return of({ accessToken: this.jwtService.sign(payload) });
       }),
     );
   }
