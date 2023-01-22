@@ -3,5 +3,7 @@
   "unauthorized": "Не авторизован",
   "not_found": "{target} не найден(а)",
   "group_not_found": "Группа не найдена",
-  "email_exists": "Пользователь с таким email уже существует"
+  "email_exists": "Пользователь с таким email уже существует",
+  "user_not_found": "Пользователь не найден",
+  "group_is_not_empty": "Группа не пуста"
 }
