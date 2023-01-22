@@ -31,7 +31,11 @@ export class AuthService {
     email: string,
     pass: string,
   ): Observable<Omit<User, 'password'>> {
-    return from(this.usersService.findOne(email)).pipe(
+    return from(
+      this.usersService.findOne({
+        email,
+      }),
+    ).pipe(
       switchMap((user) => {
         if (user) {
           return from(bcrypt.compare(pass, user.password)).pipe(
@@ -70,7 +74,10 @@ export class AuthService {
     );
   }
 
-  refreshTokens(userId: string, refreshToken: string): Observable<Tokens> {
+  refreshTokens(
+    userId: Schema.Types.ObjectId,
+    refreshToken: string,
+  ): Observable<Tokens> {
     return from(this.usersService.findById(userId)).pipe(
       switchMap((user) => {
         if (!user || !user.refreshToken) {
@@ -101,7 +108,7 @@ export class AuthService {
     return from(bcrypt.hash(refreshToken, 10)).pipe(
       switchMap((hash) => {
         return from(
-          this.usersService.updateOne(userId, { refreshToken: hash }),
+          this.usersService.updateById(userId, { refreshToken: hash }),
         );
       }),
     );

@@ -20,7 +20,11 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: JwtPayload) {
-    return from(this.usersService.findOne(payload.email)).pipe(
+    return from(
+      this.usersService.findOne({
+        email: payload.email,
+      }),
+    ).pipe(
       switchMap((user) => {
         if (user) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
