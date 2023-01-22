@@ -4,10 +4,8 @@ import { Model, Schema } from 'mongoose';
 import { CreateGroupDto } from 'src/groups/dto/create-group.dto';
 import { from, Observable, of, switchMap } from 'rxjs';
 import { UpdateGroupDto } from 'src/groups/dto/update-group.dto';
-import { ForbiddenException, Inject, NotFoundException } from '@nestjs/common';
+import { Inject, NotFoundException } from '@nestjs/common';
 import { LocaleService } from 'src/locale/locale.service';
-import { RemoveGroupDto } from 'src/groups/dto/remove-group.dto';
-import { UserRepository } from 'src/users/repository/user.repository';
 
 export class GroupRepository {
   @InjectModel(Group.name)
@@ -15,9 +13,6 @@ export class GroupRepository {
 
   @Inject(LocaleService)
   private readonly localeService: LocaleService;
-
-  @Inject(UserRepository)
-  private readonly userRepository: UserRepository;
 
   createGroup(
     createGroupDto: CreateGroupDto,
@@ -83,44 +78,7 @@ export class GroupRepository {
     );
   }
 
-  getGroupMemberCount(groupId: Schema.Types.ObjectId) {
-    return from(this.userRepository.getGroupUsersCount(groupId));
-  }
-
-  removeGroupById(
-    userId: Schema.Types.ObjectId,
-    groupId: Schema.Types.ObjectId,
-    removeGroupDto: RemoveGroupDto,
-  ) {
-    return this.findUserGroup(userId, groupId).pipe(
-      switchMap((group) => {
-        if (!group) {
-          throw new NotFoundException(
-            this.localeService.translate('errors.group_not_found'),
-          );
-        }
-        return from(this.getGroupMemberCount(groupId)).pipe(
-          switchMap((count) => {
-            if (count > 0 && !removeGroupDto.newGroupId) {
-              throw new ForbiddenException(
-                this.localeService.translate('errors.group_not_empty'),
-              );
-            }
-            if (count > 0 && removeGroupDto.newGroupId) {
-              return this.userRepository
-                .moveAllUsersToGroup(userId, groupId, removeGroupDto.newGroupId)
-                .pipe(
-                  switchMap(() => {
-                    return from(
-                      this.groupModel.findByIdAndDelete(groupId).exec(),
-                    );
-                  }),
-                );
-            }
-            return from(this.groupModel.findByIdAndDelete(groupId).exec());
-          }),
-        );
-      }),
-    );
+  removeGroupById(groupId: Schema.Types.ObjectId) {
+    return from(this.groupModel.findByIdAndDelete(groupId).exec());
   }
 }
