@@ -16,7 +16,7 @@ export class CreateUserDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   lastName: string;
 
-  @IsEmail({}, { message: i18nValidationMessage('validation.NOT_EMAIL') })
+  @IsEmail({}, { message: i18nValidationMessage('validation.INVALID_EMAIL') })
   email: string;
 
   @IsPhoneNumber(undefined, {
