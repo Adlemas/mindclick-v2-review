@@ -51,7 +51,7 @@ export class UsersController {
     @Param('id') id: Schema.Types.ObjectId,
     @Body() dto: UpdateUserDto,
   ) {
-    return this.usersService.updateOne(id, {
+    return this.usersService.updateById(id, {
       firstName: dto.firstName,
       lastName: dto.lastName,
       birthDate: dto.birthDate,
