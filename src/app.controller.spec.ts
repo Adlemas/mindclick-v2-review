@@ -16,7 +16,15 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+      const testUser = {
+        email: 'test@test.com',
+      };
+
+      expect(
+        appController.profile({
+          user: testUser,
+        }),
+      ).toBe(testUser);
     });
   });
 });
