@@ -75,13 +75,13 @@ export class AuthService {
       switchMap((user) => {
         if (!user || !user.refreshToken) {
           throw new ForbiddenException(
-            this.localeService.translate('errors.FORBIDDEN'),
+            this.localeService.translate('errors.forbidden'),
           );
         }
         return from(bcrypt.compare(refreshToken, user.refreshToken)).pipe(
           switchMap((matches) => {
             if (!matches) {
-              throw new ForbiddenException('errors.FORBIDDEN');
+              throw new ForbiddenException('errors.forbidden');
             }
             return this.getTokens(user._id, user.email).pipe(
               switchMap((tokens) => {
