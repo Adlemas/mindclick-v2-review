@@ -85,4 +85,95 @@ export class UserRepository {
         .exec(),
     );
   }
+
+  getGroupUsersCount(groupId: Schema.Types.ObjectId): Observable<number> {
+    return from(
+      this.userModel
+        .count({
+          group: groupId,
+        })
+        .exec(),
+    );
+  }
+
+  moveUserToGroup(
+    userId: Schema.Types.ObjectId,
+    targetUserId: Schema.Types.ObjectId,
+    groupId: Schema.Types.ObjectId,
+  ): Observable<User> {
+    return from(this.findById(targetUserId)).pipe(
+      switchMap((targetUser) => {
+        if (!targetUser) {
+          throw new ForbiddenException(
+            this.localeService.translate('errors.user_not_found'),
+          );
+        }
+        return from(this.groupRepository.getUserGroups(userId)).pipe(
+          switchMap((groups) => {
+            if (
+              !groups.some(
+                (group) => group._id.toString() === targetUser.group.toString(),
+              ) ||
+              !groups.some(
+                (group) => group._id.toString() === groupId.toString(),
+              )
+            ) {
+              throw new ForbiddenException(
+                this.localeService.translate('errors.forbidden'),
+              );
+            }
+            return from(
+              this.userModel.findByIdAndUpdate(
+                targetUserId,
+                {
+                  group: groupId,
+                },
+                {
+                  new: true,
+                },
+              ),
+            );
+          }),
+        );
+      }),
+    );
+  }
+
+  moveAllUsersToGroup(
+    userId: Schema.Types.ObjectId,
+    groupId: Schema.Types.ObjectId,
+    targetGroupId: Schema.Types.ObjectId,
+  ) {
+    return from(this.groupRepository.getUserGroups(userId)).pipe(
+      switchMap((groups) => {
+        if (
+          !groups.some(
+            (group) => group._id.toString() === groupId.toString(),
+          ) ||
+          !groups.some(
+            (group) => group._id.toString() === targetGroupId.toString(),
+          )
+        ) {
+          throw new ForbiddenException(
+            this.localeService.translate('errors.forbidden'),
+          );
+        }
+        return from(
+          this.userModel
+            .updateMany(
+              {
+                group: groupId,
+              },
+              {
+                group: targetGroupId,
+              },
+              {
+                new: true,
+              },
+            )
+            .exec(),
+        );
+      }),
+    );
+  }
 }
