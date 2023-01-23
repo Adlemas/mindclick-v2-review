@@ -24,12 +24,14 @@ async function bootstrap() {
   app.useGlobalPipes(
     new I18nValidationPipe({
       transform: true,
+      stopAtFirstError: true,
     }),
   );
 
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      stopAtFirstError: true,
     }),
   );
 
