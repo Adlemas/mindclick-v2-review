@@ -65,6 +65,37 @@ export class UserRepository {
     );
   }
 
+  getUserTeacher(userId: Schema.Types.ObjectId): Observable<User> {
+    return from(this.userModel.findById(userId).exec()).pipe(
+      switchMap((user) => {
+        if (!user) {
+          throw new ForbiddenException(
+            this.localeService.translate('errors.forbidden'),
+          );
+        }
+        if (user.role !== Role.STUDENT) {
+          throw new ForbiddenException(
+            this.localeService.translate('errors.forbidden'),
+          );
+        }
+        return from(this.groupRepository.findGroupById(user.group)).pipe(
+          switchMap((group) => {
+            if (!group) {
+              throw new ForbiddenException(
+                this.localeService.translate('errors.forbidden'),
+              );
+            }
+            return from(this.userModel.findById(group.owner).exec());
+          }),
+        );
+      }),
+    );
+  }
+
+  removeUser(userId: Schema.Types.ObjectId): Observable<User> {
+    return from(this.userModel.findByIdAndDelete(userId).exec());
+  }
+
   findOne(filter: Partial<User>): Observable<UserDocument> {
     return from(this.userModel.findOne(filter).exec());
   }
