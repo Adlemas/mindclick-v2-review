@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
@@ -21,6 +22,7 @@ import { Roles } from 'src/users/decorator/roles.decorator';
 import { Role } from 'src/enum/role.enum';
 import { RolesGuard } from 'src/users/guard/roles.guard';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { RemoveUserDto } from 'src/users/dto/remove-user.dto';
 
 @Controller()
 export class UsersController {
@@ -57,6 +59,13 @@ export class UsersController {
       description: dto.description,
       phone: dto.phone,
     });
+  }
+
+  @Roles(Role.TEACHER)
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Delete('users/:userId')
+  remove(@Req() req, @Param() { userId }: RemoveUserDto) {
+    return this.usersService.remove(req.user, userId);
   }
 
   @UseGuards(AccessTokenGuard)
