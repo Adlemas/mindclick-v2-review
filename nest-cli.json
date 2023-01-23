@@ -11,6 +11,10 @@
       {
         "include": "external/**/*",
         "watchAssets": true
+      },
+      {
+        "include": "lib/mental-rules/**/*",
+        "watchAssets": true
       }
     ]
   }
