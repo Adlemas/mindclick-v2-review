@@ -77,12 +77,17 @@ export class UsersController {
   @Roles(Role.TEACHER)
   @UseGuards(AccessTokenGuard, RolesGuard)
   @Put('users/:id')
-  updateById(@Param() { id }: UpdateUserParamDto, @Body() dto: UpdateUserDto) {
-    return this.usersService.updateById(id, {
+  updateById(
+    @Req() req,
+    @Param() { id }: UpdateUserParamDto,
+    @Body() dto: UpdateUserDto,
+  ) {
+    return this.usersService.updateById(req.user, id, {
       firstName: dto.firstName,
       lastName: dto.lastName,
       birthDate: dto.birthDate,
       phone: dto.phone,
+      groupId: dto.groupId,
     });
   }
 }
