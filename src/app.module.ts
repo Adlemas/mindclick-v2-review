@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from 'src/config/config.service';
 import { LocaleModule } from './locale/locale.module';
 import { GroupsModule } from './groups/groups.module';
+import { ExpressionModule } from './expression/expression.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { GroupsModule } from './groups/groups.module';
       inject: [ConfigService],
     }),
     GroupsModule,
+    ExpressionModule,
   ],
   providers: [AppService],
 })
