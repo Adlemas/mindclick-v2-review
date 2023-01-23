@@ -5,5 +5,8 @@
   "NOT_PHONE_NUMBER": "Phone number is invalid",
   "NOT_DATE": "{property} must be a date",
   "NOT_NUMBER": "{property} must be a number",
-  "NOT_MONGO_ID": "{property} must be a valid id"
+  "NOT_MONGO_ID": "{property} must be a valid id",
+  "MIN": "{property} must be greater than or equal to {constraints.0}",
+  "MAX": "{property} must be less than or equal to {constraints.0}",
+  "NOT_BOOLEAN": "{property} must be a boolean"
 }

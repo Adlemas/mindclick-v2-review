@@ -5,5 +5,8 @@
   "NOT_PHONE_NUMBER": "Номер телефона недействителен",
   "NOT_DATE": "{property} должен быть датой",
   "NOT_NUMBER": "{property} должен быть числом",
-  "NOT_MONGO_ID": "{property} недействительный идентификатор"
+  "NOT_MONGO_ID": "{property} недействительный идентификатор",
+  "MIN": "{property} должен быть больше или равен {constraints.0}",
+  "MAX": "{property} должен быть меньше или равен {constraints.0}",
+  "NOT_BOOLEAN": "{property} должен быть булевым значением"
 }
