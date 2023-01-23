@@ -3,7 +3,7 @@ import { User } from 'src/schemas/user.schema';
 import { from, Observable, switchMap } from 'rxjs';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { UserRepository } from 'src/users/repository/user.repository';
-import { Schema } from 'mongoose';
+import { isValidObjectId, Schema } from 'mongoose';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LocaleService } from 'src/locale/locale.service';
 
@@ -45,15 +45,15 @@ export class UsersService {
     userId: Schema.Types.ObjectId | UpdateUserDto, // updateUserDto
     updateUserDto?: UpdateUserDto,
   ) {
-    if (user instanceof Schema.Types.ObjectId) {
-      if (!updateUserDto.groupId) {
-        return from(
-          this.userRepository.updateById(user, userId as UpdateUserDto),
-        );
-      }
-      return;
+    if (isValidObjectId(user) || typeof user === 'string') {
+      return from(
+        this.userRepository.updateById(user as Schema.Types.ObjectId, {
+          ...(userId as UpdateUserDto),
+          groupId: undefined,
+        }),
+      );
     }
-    return user.pipe(
+    return (user as Observable<User>).pipe(
       switchMap((user) => {
         return from(
           this.userRepository.getUserTeacher(userId as Schema.Types.ObjectId),
