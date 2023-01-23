@@ -7,6 +7,6 @@ export type Expression = (
 ) => number[];
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const expression: Expression = require('src/external/expression.js').default;
+const expression: Expression = require('../external/expression.js').default;
 
 export default expression;
