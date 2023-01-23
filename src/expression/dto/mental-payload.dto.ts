@@ -2,6 +2,7 @@ import {
   IsBoolean,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   Max,
   Min,
@@ -23,5 +24,6 @@ export class MentalPayloadDto {
   @Min(2, { message: i18nValidationMessage('validation.MIN') })
   max: number;
   @IsBoolean({ message: i18nValidationMessage('validation.NOT_BOOLEAN') })
-  isBiggerMax: boolean;
+  @IsOptional()
+  isBiggerMax?: boolean;
 }

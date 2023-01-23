@@ -9,6 +9,9 @@ export class ExpressionController {
 
   @Get('mental')
   mental(@Body() dto: MentalPayloadDto) {
-    return this.expressionService.mental(dto);
+    return this.expressionService.mental({
+      ...dto,
+      isBiggerMax: dto.isBiggerMax ?? false,
+    });
   }
 }
