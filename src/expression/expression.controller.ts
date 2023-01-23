@@ -3,6 +3,7 @@ import { ExpressionService } from 'src/expression/expression.service';
 import { MentalPayloadDto } from 'src/expression/dto/mental-payload.dto';
 import { AccessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { MultiplyPayloadDto } from 'src/expression/dto/mutliply-payload.dto';
+import { DividePayloadDto } from 'src/expression/dto/divide-payload.dto';
 
 @Controller('expression')
 export class ExpressionController {
@@ -22,5 +23,11 @@ export class ExpressionController {
   @Get('multiply')
   multiply(@Body() dto: MultiplyPayloadDto) {
     return this.expressionService.multiply(dto);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('multiply')
+  divide(@Body() dto: DividePayloadDto) {
+    return this.expressionService.divide(dto);
   }
 }
