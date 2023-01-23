@@ -34,8 +34,7 @@ export class GroupsController {
     return this.groupsService.addGroup(createGroupDto, req.user);
   }
 
-  @Roles(Role.TEACHER)
-  @UseGuards(AccessTokenGuard, RolesGuard)
+  @UseGuards(AccessTokenGuard)
   @Get()
   getMyGroups(@Req() req) {
     return this.groupsService.getUserGroups(req.user);
