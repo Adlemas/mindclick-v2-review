@@ -82,12 +82,25 @@ export class UsersController {
     @Param() { id }: UpdateUserParamDto,
     @Body() dto: UpdateUserDto,
   ) {
-    return this.usersService.updateById(req.user, id, {
+    const payload: UpdateUserDto = {
       firstName: dto.firstName,
       lastName: dto.lastName,
       birthDate: dto.birthDate,
       phone: dto.phone,
       groupId: dto.groupId,
-    });
+      rate: dto.rate,
+      points: dto.points,
+    };
+    return this.usersService.updateById(
+      dto.groupId ? req.user : id,
+      dto.groupId ? id : payload,
+      dto.groupId ? payload : undefined,
+    );
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('myrank')
+  getMyRank(@Req() req) {
+    return this.usersService.getMyRank(req.user);
   }
 }
