@@ -1,5 +1,6 @@
 import {
   IsDate,
+  IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsPhoneNumber,
@@ -46,6 +47,11 @@ export class UpdateUserDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsOptional()
   address?: string;
+
+  @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
+  @IsMongoId({ message: i18nValidationMessage('validation.NOT_MONGO_ID') })
+  @IsOptional()
+  groupId?: Schema.Types.ObjectId;
 
   refreshToken?: string;
 }
