@@ -14,6 +14,7 @@ import { Schema } from 'mongoose';
 import { RemoveGroupDto } from 'src/groups/dto/remove-group.dto';
 import { UsersService } from 'src/users/users.service';
 import { LocaleService } from 'src/locale/locale.service';
+import { Role } from 'src/enum/role.enum';
 
 @Injectable()
 export class GroupsService {
@@ -40,7 +41,15 @@ export class GroupsService {
   getUserGroups(user: Observable<User>) {
     return user.pipe(
       switchMap((user) => {
-        return this.groupRepository.getUserGroups(user._id);
+        if (user.role === Role.TEACHER) {
+          return this.groupRepository.getUserGroups(user._id);
+        }
+        if (user.role === Role.STUDENT) {
+          return this.groupRepository.getGroup(user.group);
+        }
+        throw new ForbiddenException(
+          this.localeService.translate('errors.forbidden'),
+        );
       }),
     );
   }
