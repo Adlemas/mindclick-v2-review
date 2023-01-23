@@ -9,6 +9,8 @@ import { GroupRepository } from 'src/groups/repository/group.repository';
 import { LocaleService } from 'src/locale/locale.service';
 import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/role.enum';
+import { Group } from 'src/schemas/group.schema';
+import { Rank } from 'src/users/interface/rank.interface';
 
 @Injectable()
 export class UserRepository {
@@ -205,6 +207,21 @@ export class UserRepository {
             .exec(),
         );
       }),
+    );
+  }
+
+  getUserGroups(userId: Schema.Types.ObjectId): Observable<Array<Group>> {
+    return this.groupRepository.getUserGroups(userId);
+  }
+
+  getGroupsRank(groups: Array<Group>): Observable<Array<Rank>> {
+    return from(
+      this.userModel
+        .find(
+          { group: { $in: groups.map((g) => g._id) } },
+          { rate: 1, points: 1 },
+        )
+        .exec(),
     );
   }
 }
