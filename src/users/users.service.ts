@@ -41,15 +41,23 @@ export class UsersService {
   }
 
   updateById(
-    user: Observable<User>,
-    userId: Schema.Types.ObjectId,
-    updateUserDto: UpdateUserDto,
+    user: Observable<User> | Schema.Types.ObjectId, // userId
+    userId: Schema.Types.ObjectId | UpdateUserDto, // updateUserDto
+    updateUserDto?: UpdateUserDto,
   ) {
-    if (!updateUserDto.groupId)
-      return this.userRepository.updateById(userId, updateUserDto);
+    if (user instanceof Schema.Types.ObjectId) {
+      if (!updateUserDto.groupId) {
+        return from(
+          this.userRepository.updateById(user, userId as UpdateUserDto),
+        );
+      }
+      return;
+    }
     return user.pipe(
       switchMap((user) => {
-        return from(this.userRepository.getUserTeacher(userId)).pipe(
+        return from(
+          this.userRepository.getUserTeacher(userId as Schema.Types.ObjectId),
+        ).pipe(
           switchMap((teacher) => {
             if (teacher._id.toString() !== user._id.toString()) {
               throw new ForbiddenException(
@@ -57,13 +65,16 @@ export class UsersService {
               );
             }
             return from(
-              this.userRepository.updateById(userId, updateUserDto),
+              this.userRepository.updateById(
+                userId as Schema.Types.ObjectId,
+                updateUserDto,
+              ),
             ).pipe(
               switchMap((user) => {
                 return from(
                   this.userRepository.moveUserToGroup(
                     user._id,
-                    userId,
+                    userId as Schema.Types.ObjectId,
                     updateUserDto.groupId,
                   ),
                 );
