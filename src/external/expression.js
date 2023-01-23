@@ -3,48 +3,125 @@
 /* eslint-disable max-len */
 /* eslint-disable no-use-before-define */
 /* eslint-disable camelcase */
-import fs from 'fs';
+const fs = require('fs');
+const path = require('path');
 
-const NF = JSON.parse(fs.readFileSync('./lib/nf.json'));
-const LF = JSON.parse(fs.readFileSync('./lib/lf.json'));
-const BF = JSON.parse(fs.readFileSync('./lib/bf.json'));
-const FF = JSON.parse(fs.readFileSync('./lib/ff.json'));
+const NF = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/nf.json')),
+);
+const LF = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/lf.json')),
+);
+const BF = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/bf.json')),
+);
+const FF = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/ff.json')),
+);
 
-const p1p5m4 = JSON.parse(fs.readFileSync('./lib/+1=+5-4.json'));
-const p2p5m3 = JSON.parse(fs.readFileSync('./lib/+2=+5-3.json'));
-const p3p5m2 = JSON.parse(fs.readFileSync('./lib/+3=+5-2.json'));
-const p4p5m1 = JSON.parse(fs.readFileSync('./lib/+4=+5-1.json'));
-const m1p4m5 = JSON.parse(fs.readFileSync('./lib/-1=+4-5.json'));
-const m2p3m5 = JSON.parse(fs.readFileSync('./lib/-2=+3-5.json'));
-const m3p2m5 = JSON.parse(fs.readFileSync('./lib/-3=+2-5.json'));
-const m4p1m5 = JSON.parse(fs.readFileSync('./lib/-4=+1-5.json'));
-const p1m9p10 = JSON.parse(fs.readFileSync('./lib/+1=-9+10.json'));
-const p2m8p10 = JSON.parse(fs.readFileSync('./lib/+2=-8+10.json'));
-const p3m7p10 = JSON.parse(fs.readFileSync('./lib/+3=-7+10.json'));
-const p4m6p10 = JSON.parse(fs.readFileSync('./lib/+4=-6+10.json'));
-const p5m5p10 = JSON.parse(fs.readFileSync('./lib/+5=-5+10.json'));
-const p6m4p10 = JSON.parse(fs.readFileSync('./lib/+6=-4+10.json'));
-const p7m3p10 = JSON.parse(fs.readFileSync('./lib/+7=-3+10.json'));
-const p8m2p10 = JSON.parse(fs.readFileSync('./lib/+8=-2+10.json'));
-const p9m1p10 = JSON.parse(fs.readFileSync('./lib/+9=-1+10.json'));
-const m1m10p9 = JSON.parse(fs.readFileSync('./lib/-1=-10+9.json'));
-const m2m10p8 = JSON.parse(fs.readFileSync('./lib/-2=-10+8.json'));
-const m3m10p7 = JSON.parse(fs.readFileSync('./lib/-3=-10+7.json'));
-const m4m10p6 = JSON.parse(fs.readFileSync('./lib/-4=-10+6.json'));
-const m5m10p5 = JSON.parse(fs.readFileSync('./lib/-5=-10+5.json'));
-const m6m10p4 = JSON.parse(fs.readFileSync('./lib/-6=-10+4.json'));
-const m7m10p3 = JSON.parse(fs.readFileSync('./lib/-7=-10+3.json'));
-const m8m10p2 = JSON.parse(fs.readFileSync('./lib/-8=-10+2.json'));
-const m9m10p1 = JSON.parse(fs.readFileSync('./lib/-9=-10+1.json'));
+const p1p5m4 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+1=+5-4.json')),
+);
+const p2p5m3 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+2=+5-3.json')),
+);
+const p3p5m2 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+3=+5-2.json')),
+);
+const p4p5m1 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+4=+5-1.json')),
+);
+const m1p4m5 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-1=+4-5.json')),
+);
+const m2p3m5 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-2=+3-5.json')),
+);
+const m3p2m5 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-3=+2-5.json')),
+);
+const m4p1m5 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-4=+1-5.json')),
+);
+const p1m9p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+1=-9+10.json')),
+);
+const p2m8p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+2=-8+10.json')),
+);
+const p3m7p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+3=-7+10.json')),
+);
+const p4m6p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+4=-6+10.json')),
+);
+const p5m5p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+5=-5+10.json')),
+);
+const p6m4p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+6=-4+10.json')),
+);
+const p7m3p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+7=-3+10.json')),
+);
+const p8m2p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+8=-2+10.json')),
+);
+const p9m1p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+9=-1+10.json')),
+);
+const m1m10p9 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-1=-10+9.json')),
+);
+const m2m10p8 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-2=-10+8.json')),
+);
+const m3m10p7 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-3=-10+7.json')),
+);
+const m4m10p6 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-4=-10+6.json')),
+);
+const m5m10p5 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-5=-10+5.json')),
+);
+const m6m10p4 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-6=-10+4.json')),
+);
+const m7m10p3 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-7=-10+3.json')),
+);
+const m8m10p2 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-8=-10+2.json')),
+);
+const m9m10p1 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-9=-10+1.json')),
+);
 
-const p6p1m5p10 = JSON.parse(fs.readFileSync('./lib/+6=+1-5+10.json'));
-const m6m10p5m1 = JSON.parse(fs.readFileSync('./lib/-6=-10+5-1.json'));
-const p7p2m5p10 = JSON.parse(fs.readFileSync('./lib/+7=+2-5+10.json'));
-const m7m10p5m2 = JSON.parse(fs.readFileSync('./lib/-7=-10+5-2.json'));
-const p8p3m5p10 = JSON.parse(fs.readFileSync('./lib/+8=+3-5+10.json'));
-const m8m10p5m3 = JSON.parse(fs.readFileSync('./lib/-8=-10+3-5.json'));
-const p9p4m5p10 = JSON.parse(fs.readFileSync('./lib/+9=+4-5+10.json'));
-const m9m10p5m4 = JSON.parse(fs.readFileSync('./lib/-9=-10+5-4.json'));
+const p6p1m5p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+6=+1-5+10.json')),
+);
+const m6m10p5m1 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-6=-10+5-1.json')),
+);
+const p7p2m5p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+7=+2-5+10.json')),
+);
+const m7m10p5m2 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-7=-10+5-2.json')),
+);
+const p8p3m5p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+8=+3-5+10.json')),
+);
+const m8m10p5m3 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-8=-10+3-5.json')),
+);
+const p9p4m5p10 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/+9=+4-5+10.json')),
+);
+const m9m10p5m4 = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../lib/mental-rules/-9=-10+5-4.json')),
+);
 
 const randItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
@@ -575,7 +652,7 @@ const check = (
   return isAdditive ? Number(term) : -Number(term);
 };
 
-export const formulas = ['NF', 'LF', 'BF', 'FF'];
+const formulas = ['NF', 'LF', 'BF', 'FF'];
 
 const expression = (formula, terms_length, min, max, isBiggerMax) => {
   const form = randItem(formulas);
@@ -665,4 +742,7 @@ const expression = (formula, terms_length, min, max, isBiggerMax) => {
   }
 };
 
-export default expression;
+module.exports = {
+  default: expression,
+  formulas,
+};
