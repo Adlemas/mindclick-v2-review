@@ -2,6 +2,7 @@ import {
   IsDate,
   IsMongoId,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsPhoneNumber,
   IsString,
@@ -52,6 +53,14 @@ export class UpdateUserDto {
   @IsMongoId({ message: i18nValidationMessage('validation.NOT_MONGO_ID') })
   @IsOptional()
   groupId?: Schema.Types.ObjectId;
+
+  @IsNumber({}, { message: i18nValidationMessage('validation.NOT_NUMBER') })
+  @IsOptional()
+  rate?: number;
+
+  @IsNumber({}, { message: i18nValidationMessage('validation.NOT_NUMBER') })
+  @IsOptional()
+  points?: number;
 
   refreshToken?: string;
 }
