@@ -23,6 +23,10 @@ export class GroupRepository {
     return from(group.save());
   }
 
+  getGroup(groupId: Schema.Types.ObjectId): Observable<Group> {
+    return from(this.groupModel.findById(groupId).exec());
+  }
+
   getUserGroups(userId: Schema.Types.ObjectId): Observable<Array<Group>> {
     return from(
       this.groupModel
