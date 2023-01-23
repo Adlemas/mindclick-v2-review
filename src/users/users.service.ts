@@ -1,15 +1,19 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { User } from 'src/schemas/user.schema';
-import { Observable, switchMap } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { UserRepository } from 'src/users/repository/user.repository';
 import { Schema } from 'mongoose';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { LocaleService } from 'src/locale/locale.service';
 
 @Injectable()
 export class UsersService {
   @Inject(UserRepository)
   private readonly userRepository: UserRepository;
+
+  @Inject(LocaleService)
+  private readonly localeService: LocaleService;
 
   findOne(filter: Partial<User>) {
     return this.userRepository.findOne(filter);
@@ -17,6 +21,23 @@ export class UsersService {
 
   findById(userId: Schema.Types.ObjectId) {
     return this.userRepository.findById(userId);
+  }
+
+  remove(user: Observable<User>, userId: Schema.Types.ObjectId) {
+    return user.pipe(
+      switchMap((u) => {
+        return from(this.userRepository.getUserTeacher(userId)).pipe(
+          switchMap((teacher) => {
+            if (teacher._id.toString() !== u._id.toString()) {
+              throw new ForbiddenException(
+                this.localeService.translate('errors.forbidden'),
+              );
+            }
+            return from(this.userRepository.removeUser(userId));
+          }),
+        );
+      }),
+    );
   }
 
   updateById(userId: Schema.Types.ObjectId, updateUserDto: UpdateUserDto) {
