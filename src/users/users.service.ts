@@ -70,7 +70,7 @@ export class UsersService {
                 updateUserDto,
               ),
             ).pipe(
-              switchMap((user) => {
+              switchMap(() => {
                 return from(
                   this.userRepository.moveUserToGroup(
                     user._id,
