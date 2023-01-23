@@ -26,7 +26,7 @@ export class ExpressionController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get('multiply')
+  @Get('divide')
   divide(@Body() dto: DividePayloadDto) {
     return this.expressionService.divide(dto);
   }
