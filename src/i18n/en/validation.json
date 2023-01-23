@@ -8,5 +8,8 @@
   "NOT_MONGO_ID": "{property} must be a valid id",
   "MIN": "{property} must be greater than or equal to {constraints.0}",
   "MAX": "{property} must be less than or equal to {constraints.0}",
-  "NOT_BOOLEAN": "{property} must be a boolean"
+  "NOT_BOOLEAN": "{property} must be a boolean",
+  "NOT_STRING_ARRAY": "{property} must be a list of strings",
+  "ARRAY_MIN_SIZE": "{property} must contain at least {constraints.0} items",
+  "ARRAY_MAX_SIZE": "{property} must contain at most {constraints.0} items"
 }

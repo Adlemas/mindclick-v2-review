@@ -8,5 +8,8 @@
   "NOT_MONGO_ID": "{property} недействительный идентификатор",
   "MIN": "{property} должен быть больше или равен {constraints.0}",
   "MAX": "{property} должен быть меньше или равен {constraints.0}",
-  "NOT_BOOLEAN": "{property} должен быть булевым значением"
+  "NOT_BOOLEAN": "{property} должен быть булевым значением",
+  "NOT_STRING_ARRAY": "{property} должен быть списком строк",
+  "ARRAY_MIN_SIZE": "{property} должен содержать не менее {constraints.0} элементов",
+  "ARRAY_MAX_SIZE": "{property} должен содержать не более {constraints.0} элементов"
 }
