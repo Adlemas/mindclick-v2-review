@@ -40,8 +40,39 @@ export class UsersService {
     );
   }
 
-  updateById(userId: Schema.Types.ObjectId, updateUserDto: UpdateUserDto) {
-    return this.userRepository.updateById(userId, updateUserDto);
+  updateById(
+    user: Observable<User>,
+    userId: Schema.Types.ObjectId,
+    updateUserDto: UpdateUserDto,
+  ) {
+    if (!updateUserDto.groupId)
+      return this.userRepository.updateById(userId, updateUserDto);
+    return user.pipe(
+      switchMap((user) => {
+        return from(this.userRepository.getUserTeacher(userId)).pipe(
+          switchMap((teacher) => {
+            if (teacher._id.toString() !== user._id.toString()) {
+              throw new ForbiddenException(
+                this.localeService.translate('errors.forbidden'),
+              );
+            }
+            return from(
+              this.userRepository.updateById(userId, updateUserDto),
+            ).pipe(
+              switchMap((user) => {
+                return from(
+                  this.userRepository.moveUserToGroup(
+                    user._id,
+                    userId,
+                    updateUserDto.groupId,
+                  ),
+                );
+              }),
+            );
+          }),
+        );
+      }),
+    );
   }
 
   update(user: User | Observable<User>, dto: UpdateUserDto) {
