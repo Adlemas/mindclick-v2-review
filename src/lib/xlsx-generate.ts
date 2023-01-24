@@ -1,5 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const Excel = require('exceljs');
 import { Readable } from 'stream';
 
 export type Column = { header: string; key: string };
