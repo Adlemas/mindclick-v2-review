@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Inject, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Query,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ExpressionService } from 'src/expression/expression.service';
 import { MentalPayloadDto } from 'src/expression/dto/mental-payload.dto';
 import { AccessTokenGuard } from 'src/auth/guard/access-token.guard';
@@ -9,13 +18,15 @@ import { Roles } from 'src/users/decorator/roles.decorator';
 import { Role } from 'src/enum/role.enum';
 import { MentalDocumentPayloadDto } from 'src/expression/dto/mental-documet-query.dto';
 
+import type { Response } from 'express';
+
 @Controller('expression')
 export class ExpressionController {
   @Inject(ExpressionService)
   private readonly expressionService: ExpressionService;
 
   @UseGuards(AccessTokenGuard)
-  @Get('mental')
+  @Post('mental')
   mental(@Body() dto: MentalPayloadDto) {
     return this.expressionService.mental({
       ...dto,
@@ -25,19 +36,47 @@ export class ExpressionController {
 
   @Roles(Role.TEACHER)
   @UseGuards(AccessTokenGuard, RolesGuard)
-  @Get('mental/document')
-  mentalDocument(@Body() dto: MentalDocumentPayloadDto) {
-    return dto;
+  @Get('mental-document')
+  mentalDocument(@Query() dto: MentalDocumentPayloadDto, @Res() res: Response) {
+    // dynamic set content-type to pdf if fileFormat is pdf or xlsx
+    if (dto.fileFormat === 'pdf') {
+      res.setHeader('Content-Type', 'application/pdf');
+    } else if (dto.fileFormat === 'excel') {
+      res.setHeader(
+        'Content-Type',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      );
+    }
+    this.expressionService
+      .mentalDocument({
+        ...dto,
+        terms: parseInt(dto.terms.toString(), 10),
+        pageCount: parseInt(dto.pageCount.toString(), 10),
+        min: parseInt(dto.min.toString(), 10),
+        max: parseInt(dto.max.toString(), 10),
+        hCount: parseInt(dto.hCount.toString(), 10),
+        vCount: parseInt(dto.vCount.toString(), 10),
+        isAutoHeight: dto.isAutoHeight.toString() === 'true',
+        byPage: dto.byPage.toString() === 'true',
+        byRows: parseInt(dto.byRows.toString(), 10),
+        isGrow: dto.isGrow.toString() === 'true',
+        isGrowByRows: dto.isGrowByRows.toString() === 'true',
+        withRight: dto.withRight.toString() === 'true',
+        design: dto.design.toString() === 'true',
+      })
+      .subscribe((stream) => {
+        stream.getStream().pipe(res);
+      });
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get('multiply')
+  @Post('multiply')
   multiply(@Body() dto: MultiplyPayloadDto) {
     return this.expressionService.multiply(dto);
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get('divide')
+  @Post('divide')
   divide(@Body() dto: DividePayloadDto) {
     return this.expressionService.divide(dto);
   }
