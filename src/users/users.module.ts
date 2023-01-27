@@ -17,7 +17,7 @@ import { GroupsModule } from 'src/groups/groups.module';
     GroupsModule,
   ],
   providers: [UsersService, UserRepository],
-  exports: [UsersService],
+  exports: [UsersService, UserRepository],
   controllers: [UsersController],
 })
 export class UsersModule {}
