@@ -9,6 +9,7 @@ import { LocaleModule } from './locale/locale.module';
 import { GroupsModule } from './groups/groups.module';
 import { ExpressionModule } from './expression/expression.module';
 import { TasksModule } from './tasks/tasks.module';
+import { PaginationModule } from './pagination/pagination.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { TasksModule } from './tasks/tasks.module';
     GroupsModule,
     ExpressionModule,
     TasksModule,
+    PaginationModule,
   ],
   providers: [AppService],
 })
