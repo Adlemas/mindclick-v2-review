@@ -8,6 +8,7 @@ import { ConfigService } from 'src/config/config.service';
 import { LocaleModule } from './locale/locale.module';
 import { GroupsModule } from './groups/groups.module';
 import { ExpressionModule } from './expression/expression.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ExpressionModule } from './expression/expression.module';
     }),
     GroupsModule,
     ExpressionModule,
+    TasksModule,
   ],
   providers: [AppService],
 })
