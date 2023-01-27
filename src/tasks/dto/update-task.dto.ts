@@ -27,5 +27,5 @@ export class UpdateTaskDto {
     { message: i18nValidationMessage('validation.NOT_DATE') },
   )
   @IsOptional()
-  expiresAt: string;
+  expiresAt: Date;
 }
