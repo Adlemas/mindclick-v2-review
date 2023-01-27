@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Model, SortOrder } from 'mongoose';
 import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 import { PaginatedResponse } from 'src/interface/paginated-response.interface';
 import { from, Observable, of, switchMap } from 'rxjs';
@@ -9,13 +9,21 @@ export class PaginationService {
   paginate<DocType>(
     model: Model<DocType>,
     dto: PaginationQueryDto,
-    filter?: Partial<DocType>,
+    {
+      filter,
+      sort,
+    }: {
+      filter?: Partial<DocType>;
+      sort?: Partial<Record<keyof DocType, SortOrder>>;
+    },
   ): Observable<PaginatedResponse<Array<DocType>>> {
     const { page, size: s } = dto;
     const size = s ?? 10;
     const offset = (page - 1) * size;
-    console.log();
     const query = model.find(filter ?? {});
+    if (sort) {
+      query.sort(sort);
+    }
     return from(query.skip(offset).limit(size).exec()).pipe(
       switchMap((records) => {
         return from(model.countDocuments(filter).exec()).pipe(
