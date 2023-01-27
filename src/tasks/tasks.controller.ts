@@ -89,6 +89,11 @@ export class TasksController {
     @Body() dto: CompleteTaskDto,
     @Req() req,
   ) {
-    return true;
+    return this.tasksService.completeTask(req.user, taskId, {
+      expression: dto.expression,
+      settings: dto.settings,
+      your: dto.your,
+      isRight: dto.isRight,
+    });
   }
 }
