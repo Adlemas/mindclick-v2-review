@@ -1,5 +1,5 @@
 import { from, Observable } from 'rxjs';
-import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
+import { CreateTaskDtoWithOwner } from 'src/tasks/dto/create-task.dto';
 import { Task, TaskDocument } from 'src/schemas/task.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Schema } from 'mongoose';
@@ -11,7 +11,7 @@ export class TaskRepository {
   @InjectModel(Task.name)
   private readonly taskModel: Model<Task>;
 
-  create(dto: CreateTaskDto): Observable<TaskDocument> {
+  create(dto: CreateTaskDtoWithOwner): Observable<TaskDocument> {
     return from(this.taskModel.create(dto));
   }
 
