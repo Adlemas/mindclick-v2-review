@@ -10,6 +10,7 @@
   "MAX": "{property} must be less than or equal to {constraints.0}",
   "NOT_BOOLEAN": "{property} must be a boolean",
   "NOT_STRING_ARRAY": "{property} must be a list of strings",
+  "NOT_NUMBER_ARRAY": "{property} must be a list of numbers",
   "ARRAY_MIN_SIZE": "{property} must contain at least {constraints.0} items",
   "ARRAY_MAX_SIZE": "{property} must contain at most {constraints.0} items",
   "NOT_ENUM": "{property} must be one of the following values: {constraints.1}",
