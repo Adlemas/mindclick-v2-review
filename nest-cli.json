@@ -15,6 +15,10 @@
       {
         "include": "lib/mental-rules/**/*",
         "watchAssets": true
+      },
+      {
+        "include": "lib/templates/**/*",
+        "watchAssets": true
       }
     ]
   }
