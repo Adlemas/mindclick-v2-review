@@ -1,4 +1,4 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 
 @Schema({
@@ -21,3 +21,5 @@ export class TaskStat {
   @Prop({ type: mongoose.Schema.Types.Mixed, required: true })
   settings: any;
 }
+
+export const TaskStatSchema = SchemaFactory.createForClass(TaskStat);
