@@ -8,6 +8,7 @@ import {
 } from 'class-validator';
 import { Simulator } from 'src/enum/simulator.enum';
 import { i18nValidationMessage } from 'nestjs-i18n';
+import { Schema } from 'mongoose';
 
 export class CreateTaskDto {
   @IsEnum(Simulator, { message: i18nValidationMessage('validation.NOT_ENUM') })
@@ -28,9 +29,9 @@ export class CreateTaskDto {
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsMongoId({ message: i18nValidationMessage('validation.NOT_MONGO_ID') })
-  createdBy: string;
+  createdBy: Schema.Types.ObjectId;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsMongoId({ message: i18nValidationMessage('validation.NOT_MONGO_ID') })
-  assignedTo: string;
+  assignedTo: Schema.Types.ObjectId;
 }
