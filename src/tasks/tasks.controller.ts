@@ -5,6 +5,7 @@ import {
   Get,
   Inject,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -23,6 +24,10 @@ import {
 } from 'src/tasks/dto/update-task.dto';
 import { RemoveTaskParamDto } from 'src/tasks/dto/remove-task.dto';
 import { GetTasksQueryDto } from 'src/tasks/dto/get-tasks-query.dto';
+import {
+  CompleteTaskDto,
+  CompleteTaskParamsDto,
+} from 'src/tasks/dto/complete-task.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -74,5 +79,16 @@ export class TasksController {
       simulator: dto.simulator,
       order: dto.order,
     });
+  }
+
+  @Roles(Role.STUDENT)
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Patch(':id')
+  completeTask(
+    @Param() { id: taskId }: CompleteTaskParamsDto,
+    @Body() dto: CompleteTaskDto,
+    @Req() req,
+  ) {
+    return true;
   }
 }
