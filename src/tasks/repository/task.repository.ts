@@ -3,7 +3,6 @@ import { CreateTaskDtoWithOwner } from 'src/tasks/dto/create-task.dto';
 import { Task, TaskDocument } from 'src/schemas/task.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Schema, SortOrder } from 'mongoose';
-import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 import { Inject, Injectable } from '@nestjs/common';
 import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 import { PaginationService } from 'src/pagination/pagination.service';
@@ -50,7 +49,7 @@ export class TaskRepository {
     return from(this.taskModel.findByIdAndDelete(id).exec());
   }
 
-  update(id: Schema.Types.ObjectId, dto: UpdateTaskDto): Observable<Task> {
+  update(id: Schema.Types.ObjectId, dto: Partial<Task>): Observable<Task> {
     return from(
       this.taskModel.findByIdAndUpdate(id, dto, {
         new: true,
