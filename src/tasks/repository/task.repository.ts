@@ -26,7 +26,7 @@ export class TaskRepository {
     filter?: Partial<Task>,
   ): Observable<PaginatedResponse<Array<Task>>> {
     return from(
-      this.paginationService.paginate(this.taskModel.find(filter), pagination),
+      this.paginationService.paginate(this.taskModel, pagination, filter),
     );
   }
 
