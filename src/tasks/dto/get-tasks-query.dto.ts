@@ -1,6 +1,6 @@
 import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 import {
-  IsBoolean,
+  IsBooleanString,
   IsEnum,
   IsMongoId,
   IsOptional,
@@ -11,7 +11,7 @@ import { Simulator } from 'src/enum/simulator.enum';
 import { Schema } from 'mongoose';
 
 export class GetTasksQueryDto extends PaginationQueryDto {
-  @IsBoolean({ message: i18nValidationMessage('validation.NOT_BOOLEAN') })
+  @IsBooleanString({ message: i18nValidationMessage('validation.NOT_BOOLEAN') })
   @IsOptional()
   completed?: boolean;
 
