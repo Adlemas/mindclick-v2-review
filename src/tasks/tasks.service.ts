@@ -8,6 +8,7 @@ import { User } from 'src/schemas/user.schema';
 import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 import { Schema } from 'mongoose';
 import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
+import { Role } from 'src/enum/role.enum';
 
 @Injectable()
 export class TasksService {
@@ -98,9 +99,11 @@ export class TasksService {
 
   getTasks(user: Observable<User>, pagination: PaginationQueryDto) {
     return user.pipe(
-      switchMap((createdBy) => {
+      switchMap((user) => {
         return this.taskRepository.getWithPagination(pagination, {
-          createdBy: createdBy._id,
+          ...(user.role === Role.TEACHER
+            ? { createdBy: user._id }
+            : { assignedTo: user._id }),
         });
       }),
     );

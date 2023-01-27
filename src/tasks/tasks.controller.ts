@@ -63,8 +63,7 @@ export class TasksController {
     return this.tasksService.deleteTask(req.user, id);
   }
 
-  @Roles(Role.TEACHER)
-  @UseGuards(AccessTokenGuard, RolesGuard)
+  @UseGuards(AccessTokenGuard)
   @Get()
   getTasks(@Req() req, @Query() pagination: PaginationQueryDto) {
     return this.tasksService.getTasks(req.user, {
