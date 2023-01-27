@@ -29,5 +29,5 @@ export class GetTasksQueryDto extends PaginationQueryDto {
     message: i18nValidationMessage('validation.NOT_ENUM'),
   })
   @IsOptional()
-  order?: 'asc' | 'desc';
+  order?: Order;
 }
