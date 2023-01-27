@@ -7,8 +7,8 @@ import { LocaleService } from 'src/locale/locale.service';
 import { User } from 'src/schemas/user.schema';
 import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 import { Schema } from 'mongoose';
-import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 import { Role } from 'src/enum/role.enum';
+import { GetTasksQueryDto } from 'src/tasks/dto/get-tasks-query.dto';
 
 @Injectable()
 export class TasksService {
@@ -97,14 +97,26 @@ export class TasksService {
     );
   }
 
-  getTasks(user: Observable<User>, pagination: PaginationQueryDto) {
+  getTasks(user: Observable<User>, dto: GetTasksQueryDto) {
     return user.pipe(
       switchMap((user) => {
-        return this.taskRepository.getWithPagination(pagination, {
-          ...(user.role === Role.TEACHER
-            ? { createdBy: user._id }
-            : { assignedTo: user._id }),
-        });
+        return this.taskRepository.getWithPagination(
+          {
+            page: dto.page,
+            size: dto.size,
+          },
+          {
+            ...(user.role === Role.TEACHER
+              ? { createdBy: user._id }
+              : { assignedTo: user._id }),
+            completed: dto.completed,
+            simulator: dto.simulator,
+            assignedTo: dto.assignedTo,
+          },
+          {
+            createdAt: dto.order === 'asc' ? 1 : -1,
+          },
+        );
       }),
     );
   }

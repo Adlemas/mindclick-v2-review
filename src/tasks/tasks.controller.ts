@@ -22,7 +22,7 @@ import {
   UpdateTaskParamDto,
 } from 'src/tasks/dto/update-task.dto';
 import { RemoveTaskParamDto } from 'src/tasks/dto/remove-task.dto';
-import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
+import { GetTasksQueryDto } from 'src/tasks/dto/get-tasks-query.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -65,10 +65,10 @@ export class TasksController {
 
   @UseGuards(AccessTokenGuard)
   @Get()
-  getTasks(@Req() req, @Query() pagination: PaginationQueryDto) {
+  getTasks(@Req() req, @Query() dto: GetTasksQueryDto) {
     return this.tasksService.getTasks(req.user, {
-      page: pagination.page,
-      size: pagination.size,
+      page: dto.page,
+      size: dto.size,
     });
   }
 }

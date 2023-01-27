@@ -2,7 +2,7 @@ import { from, Observable } from 'rxjs';
 import { CreateTaskDtoWithOwner } from 'src/tasks/dto/create-task.dto';
 import { Task, TaskDocument } from 'src/schemas/task.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Schema } from 'mongoose';
+import { Model, Schema, SortOrder } from 'mongoose';
 import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 import { Inject, Injectable } from '@nestjs/common';
 import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
@@ -24,9 +24,13 @@ export class TaskRepository {
   getWithPagination(
     pagination: PaginationQueryDto,
     filter?: Partial<Task>,
+    sort?: Partial<Record<keyof Task, SortOrder>>,
   ): Observable<PaginatedResponse<Array<Task>>> {
     return from(
-      this.paginationService.paginate(this.taskModel, pagination, filter),
+      this.paginationService.paginate(this.taskModel, pagination, {
+        filter,
+        sort,
+      }),
     );
   }
 
