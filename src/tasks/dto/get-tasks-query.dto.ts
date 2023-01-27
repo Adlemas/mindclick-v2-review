@@ -9,6 +9,7 @@ import {
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { Simulator } from 'src/enum/simulator.enum';
 import { Schema } from 'mongoose';
+import { Order } from 'src/enum/order.enum';
 
 export class GetTasksQueryDto extends PaginationQueryDto {
   @IsBooleanString({ message: i18nValidationMessage('validation.NOT_BOOLEAN') })
@@ -24,7 +25,7 @@ export class GetTasksQueryDto extends PaginationQueryDto {
   @IsOptional()
   assignedTo?: Schema.Types.ObjectId;
 
-  @IsEnum(['asc', 'desc'], {
+  @IsEnum(Order, {
     message: i18nValidationMessage('validation.NOT_ENUM'),
   })
   @IsOptional()
