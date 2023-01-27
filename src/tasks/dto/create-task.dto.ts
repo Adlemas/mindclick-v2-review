@@ -29,9 +29,11 @@ export class CreateTaskDto {
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsMongoId({ message: i18nValidationMessage('validation.NOT_MONGO_ID') })
-  createdBy: Schema.Types.ObjectId;
+  assignedTo: Schema.Types.ObjectId;
+}
 
+export class CreateTaskDtoWithOwner extends CreateTaskDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsMongoId({ message: i18nValidationMessage('validation.NOT_MONGO_ID') })
-  assignedTo: Schema.Types.ObjectId;
+  createdBy: Schema.Types.ObjectId;
 }
