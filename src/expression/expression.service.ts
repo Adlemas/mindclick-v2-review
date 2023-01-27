@@ -13,6 +13,11 @@ import divide from 'src/lib/divide';
 import { MentalDocumentPayloadDto } from 'src/expression/dto/mental-documet-query.dto';
 import pdfGenerate from 'src/lib/pdf-generate';
 import { from, Observable, of, switchMap } from 'rxjs';
+import { GenerateOptions } from 'src/lib/pug-divide-multiply';
+import {
+  divide as divideDoc,
+  multiply as multiplyDoc,
+} from 'src/lib/pug-divide-multiply';
 
 @Injectable()
 export class ExpressionService {
@@ -55,6 +60,14 @@ export class ExpressionService {
         return of(new StreamableFile(stream));
       }),
     );
+  }
+
+  divideDocument(payload: DividePayloadDto, options: GenerateOptions) {
+    return divideDoc(payload, options);
+  }
+
+  multiplyDocument(payload: MultiplyPayloadDto, options: GenerateOptions) {
+    return multiplyDoc(payload, options);
   }
 
   multiply(payload: MultiplyPayloadDto): MultiplyResponse {
