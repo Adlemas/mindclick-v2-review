@@ -4,7 +4,9 @@ import { Task, TaskDocument } from 'src/schemas/task.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Schema } from 'mongoose';
 import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class TaskRepository {
   @InjectModel(Task.name)
   private readonly taskModel: Model<Task>;
