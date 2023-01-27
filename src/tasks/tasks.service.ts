@@ -7,6 +7,7 @@ import { LocaleService } from 'src/locale/locale.service';
 import { User } from 'src/schemas/user.schema';
 import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 import { Schema } from 'mongoose';
+import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 
 @Injectable()
 export class TasksService {
@@ -91,6 +92,16 @@ export class TasksService {
               return this.taskRepository.remove(taskId);
             }),
           );
+      }),
+    );
+  }
+
+  getTasks(user: Observable<User>, pagination: PaginationQueryDto) {
+    return user.pipe(
+      switchMap((createdBy) => {
+        return this.taskRepository.getWithPagination(pagination, {
+          createdBy: createdBy._id,
+        });
       }),
     );
   }
