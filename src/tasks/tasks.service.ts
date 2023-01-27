@@ -161,6 +161,7 @@ export class TasksService {
                         })
                         .pipe(switchMap(() => of(updatedTask)));
                     }
+                    return of(updatedTask);
                   }),
                 );
             }),
