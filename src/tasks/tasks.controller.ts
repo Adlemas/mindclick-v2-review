@@ -69,6 +69,10 @@ export class TasksController {
     return this.tasksService.getTasks(req.user, {
       page: dto.page,
       size: dto.size,
+      completed: dto.completed,
+      assignedTo: dto.assignedTo,
+      simulator: dto.simulator,
+      order: dto.order,
     });
   }
 }
