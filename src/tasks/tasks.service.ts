@@ -72,4 +72,26 @@ export class TasksService {
       }),
     );
   }
+
+  deleteTask(user: Observable<User>, taskId: Schema.Types.ObjectId) {
+    return user.pipe(
+      switchMap((createdBy) => {
+        return this.taskRepository
+          .findOne({
+            _id: taskId,
+            createdBy: createdBy._id,
+          })
+          .pipe(
+            switchMap((task) => {
+              if (!task) {
+                throw new ForbiddenException(
+                  this.localeService.translate('errors.forbidden'),
+                );
+              }
+              return this.taskRepository.remove(taskId);
+            }),
+          );
+      }),
+    );
+  }
 }
