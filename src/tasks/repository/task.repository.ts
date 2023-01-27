@@ -4,15 +4,31 @@ import { Task, TaskDocument } from 'src/schemas/task.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Schema } from 'mongoose';
 import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
+import { PaginationService } from 'src/pagination/pagination.service';
 
 @Injectable()
 export class TaskRepository {
   @InjectModel(Task.name)
   private readonly taskModel: Model<Task>;
 
+  @Inject(PaginationService)
+  private readonly paginationService: PaginationService;
+
   create(dto: CreateTaskDtoWithOwner): Observable<TaskDocument> {
     return from(this.taskModel.create(dto));
+  }
+
+  getWithPagination(
+    pagination: PaginationQueryDto,
+    filter?: Partial<Task>,
+  ): Observable<Array<Task>> {
+    return from(
+      this.paginationService
+        .paginate(this.taskModel.find(filter), pagination)
+        .exec(),
+    );
   }
 
   findById(id: Schema.Types.ObjectId): Observable<Task> {
