@@ -19,6 +19,8 @@ import { Role } from 'src/enum/role.enum';
 import { MentalDocumentPayloadDto } from 'src/expression/dto/mental-documet-query.dto';
 
 import type { Response } from 'express';
+import { MultiplyDocumentPayloadDto } from 'src/expression/dto/multiply-document-payload.dto';
+import { DivideDocumentPayloadDto } from 'src/expression/dto/divide-document-payload.dto';
 
 @Controller('expression')
 export class ExpressionController {
@@ -76,8 +78,38 @@ export class ExpressionController {
   }
 
   @UseGuards(AccessTokenGuard)
+  @Post('multiply-document')
+  multiplyDocument(@Body() dto: MultiplyDocumentPayloadDto) {
+    return this.expressionService.multiplyDocument(
+      {
+        first: dto.first,
+        second: dto.second,
+      },
+      {
+        rows: dto.rows,
+        columns: dto.columns,
+      },
+    );
+  }
+
+  @UseGuards(AccessTokenGuard)
   @Post('divide')
   divide(@Body() dto: DividePayloadDto) {
     return this.expressionService.divide(dto);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Post('divide-document')
+  divideDocument(@Body() dto: DivideDocumentPayloadDto) {
+    return this.expressionService.divideDocument(
+      {
+        first: dto.first,
+        second: dto.second,
+      },
+      {
+        rows: dto.rows,
+        columns: dto.columns,
+      },
+    );
   }
 }
