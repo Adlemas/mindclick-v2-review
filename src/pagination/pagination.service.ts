@@ -1,20 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { Query } from 'mongoose';
+import { Model } from 'mongoose';
 import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 import { PaginatedResponse } from 'src/interface/paginated-response.interface';
 import { from, Observable, of, switchMap } from 'rxjs';
 
 @Injectable()
 export class PaginationService {
-  paginate<ResultType extends Array<any>, DocType>(
-    query: Query<ResultType, DocType>,
+  paginate<DocType>(
+    model: Model<DocType>,
     dto: PaginationQueryDto,
-  ): Observable<PaginatedResponse<ResultType>> {
-    const { page, size } = dto;
+    filter?: Partial<DocType>,
+  ): Observable<PaginatedResponse<Array<DocType>>> {
+    const { page, size: s } = dto;
+    const size = s ?? 10;
     const offset = (page - 1) * size;
+    console.log();
+    const query = model.find(filter ?? {});
     return from(query.skip(offset).limit(size).exec()).pipe(
       switchMap((records) => {
-        return from(query.countDocuments().exec()).pipe(
+        return from(model.countDocuments(filter).exec()).pipe(
           switchMap((totalCount) => {
             return of(this.buildPaginatedResponse(records, dto, totalCount));
           }),
@@ -29,7 +33,7 @@ export class PaginationService {
     totalCount: number,
   ): PaginatedResponse<ResultType> {
     const { page, size } = dto;
-    const totalPages = Math.ceil(totalCount / size);
+    const totalPages = Math.ceil(totalCount / size) || 0;
     return {
       records,
       totalPages,
