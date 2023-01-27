@@ -7,6 +7,7 @@ import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 import { Inject, Injectable } from '@nestjs/common';
 import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 import { PaginationService } from 'src/pagination/pagination.service';
+import { PaginatedResponse } from 'src/interface/paginated-response.interface';
 
 @Injectable()
 export class TaskRepository {
@@ -23,11 +24,9 @@ export class TaskRepository {
   getWithPagination(
     pagination: PaginationQueryDto,
     filter?: Partial<Task>,
-  ): Observable<Array<Task>> {
+  ): Observable<PaginatedResponse<Array<Task>>> {
     return from(
-      this.paginationService
-        .paginate(this.taskModel.find(filter), pagination)
-        .exec(),
+      this.paginationService.paginate(this.taskModel.find(filter), pagination),
     );
   }
 
