@@ -2,6 +2,7 @@ import mongoose, { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Simulator } from 'src/enum/simulator.enum';
 import { TaskStat } from 'src/schemas/task-stat.schema';
+import { User } from 'src/schemas/user.schema';
 
 export type TaskDocument = HydratedDocument<Task>;
 
@@ -28,6 +29,20 @@ export class Task {
 
   @Prop({ type: mongoose.Schema.Types.Mixed, required: true })
   settings: any;
+
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User.name,
+    required: true,
+  })
+  createdBy: User;
+
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User.name,
+    required: true,
+  })
+  assignedTo: User;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
