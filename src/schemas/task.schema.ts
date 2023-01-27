@@ -35,14 +35,14 @@ export class Task {
     ref: User.name,
     required: true,
   })
-  createdBy: User;
+  createdBy: mongoose.Schema.Types.ObjectId;
 
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: User.name,
     required: true,
   })
-  assignedTo: User;
+  assignedTo: mongoose.Schema.Types.ObjectId;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
