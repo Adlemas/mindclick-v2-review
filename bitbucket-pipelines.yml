@@ -1,0 +1,7 @@
+pipelines:
+  branches:
+    main:
+      - step:
+          name: Just a simple echo!
+          script:
+            - echo "Hello World!"
