@@ -2,10 +2,12 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Inject,
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -20,6 +22,7 @@ import {
   UpdateTaskParamDto,
 } from 'src/tasks/dto/update-task.dto';
 import { RemoveTaskParamDto } from 'src/tasks/dto/remove-task.dto';
+import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -58,5 +61,15 @@ export class TasksController {
   @Delete(':id')
   deleteTask(@Param() { id }: RemoveTaskParamDto, @Req() req) {
     return this.tasksService.deleteTask(req.user, id);
+  }
+
+  @Roles(Role.TEACHER)
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Get()
+  getTasks(@Req() req, @Query() pagination: PaginationQueryDto) {
+    return this.tasksService.getTasks(req.user, {
+      page: pagination.page,
+      size: pagination.size,
+    });
   }
 }
