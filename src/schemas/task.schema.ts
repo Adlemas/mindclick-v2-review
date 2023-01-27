@@ -1,7 +1,7 @@
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Simulator } from 'src/enum/simulator.enum';
-import { TaskStat } from 'src/schemas/task-stat.schema';
+import { TaskStat, TaskStatSchema } from 'src/schemas/task-stat.schema';
 import { User } from 'src/schemas/user.schema';
 
 export type TaskDocument = HydratedDocument<Task>;
@@ -18,7 +18,7 @@ export class Task {
   @Prop({ type: String, required: true, enum: Simulator })
   simulator: Simulator;
 
-  @Prop({ type: [TaskStat], default: [] })
+  @Prop({ type: [TaskStatSchema], default: [] })
   stats: TaskStat[];
 
   @Prop({ type: Number, required: true })
