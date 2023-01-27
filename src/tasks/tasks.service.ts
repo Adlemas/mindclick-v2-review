@@ -109,12 +109,14 @@ export class TasksService {
             ...(user.role === Role.TEACHER
               ? { createdBy: user._id }
               : { assignedTo: user._id }),
-            completed: dto.completed,
-            simulator: dto.simulator,
-            assignedTo: dto.assignedTo,
+            ...(dto.completed !== undefined
+              ? { completed: dto.completed }
+              : {}),
+            ...(dto.simulator ? { simulator: dto.simulator } : {}),
+            ...(dto.assignedTo ? { assignedTo: dto.assignedTo } : {}),
           },
           {
-            createdAt: dto.order === 'asc' ? 1 : -1,
+            createdAt: dto.order,
           },
         );
       }),
