@@ -2,13 +2,15 @@ import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
 import { UserRepository } from 'src/users/repository/user.repository';
 import { TaskRepository } from 'src/tasks/repository/task.repository';
-import { from, Observable, switchMap } from 'rxjs';
+import { from, Observable, of, switchMap } from 'rxjs';
 import { LocaleService } from 'src/locale/locale.service';
 import { User } from 'src/schemas/user.schema';
 import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 import { Schema } from 'mongoose';
 import { Role } from 'src/enum/role.enum';
 import { GetTasksQueryDto } from 'src/tasks/dto/get-tasks-query.dto';
+import { CompleteTaskDto } from 'src/tasks/dto/complete-task.dto';
+import { Task } from 'src/schemas/task.schema';
 
 @Injectable()
 export class TasksService {
@@ -119,6 +121,50 @@ export class TasksService {
             createdAt: dto.order,
           },
         );
+      }),
+    );
+  }
+
+  completeTask(
+    user: Observable<User>,
+    taskId: Schema.Types.ObjectId,
+    dto: CompleteTaskDto,
+  ): Observable<Task> {
+    return user.pipe(
+      switchMap((user) => {
+        return this.taskRepository
+          .findOne({
+            _id: taskId,
+            assignedTo: user._id,
+          })
+          .pipe(
+            switchMap((task) => {
+              if (!task) {
+                throw new ForbiddenException(
+                  this.localeService.translate('errors.forbidden'),
+                );
+              }
+              return this.taskRepository
+                .update(taskId, {
+                  stats: [...task.stats, dto],
+                  completed: task.stats.length + 1 === task.count,
+                })
+                .pipe(
+                  switchMap((updatedTask) => {
+                    if (updatedTask.completed) {
+                      return this.userRepository
+                        .updateById(user._id, {
+                          rate: user.rate + 1,
+                          points:
+                            user.points +
+                            updatedTask.stats.filter((t) => t.isRight).length,
+                        })
+                        .pipe(switchMap(() => of(updatedTask)));
+                    }
+                  }),
+                );
+            }),
+          );
       }),
     );
   }
