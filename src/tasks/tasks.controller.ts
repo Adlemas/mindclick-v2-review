@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Inject,
   Param,
   Post,
@@ -18,6 +19,7 @@ import {
   UpdateTaskDto,
   UpdateTaskParamDto,
 } from 'src/tasks/dto/update-task.dto';
+import { RemoveTaskParamDto } from 'src/tasks/dto/remove-task.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -49,5 +51,12 @@ export class TasksController {
       expiresAt: dto.expiresAt,
       count: dto.count,
     });
+  }
+
+  @Roles(Role.TEACHER)
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Delete(':id')
+  deleteTask(@Param() { id }: RemoveTaskParamDto, @Req() req) {
+    return this.tasksService.deleteTask(req.user, id);
   }
 }
