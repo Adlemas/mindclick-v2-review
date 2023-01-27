@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Lato, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+p {
+    font-size: .9rem;
+    font-weight: 300;
+    line-height: 1.5;
+    color: #151515;
+    display: flex;
+    align-items: center;
+}
+
+p>span {
+    border: 1px solid #ccc;
+    border-left: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 25px;
+    min-width: 25px;
+    padding-inline: 5px;
+}
+
+p>span:first-child {
+    margin-left: 5px;
+    border-left: 1px solid #ccc;
+}
+
+p>span:last-child {
+    margin-right: 5px;
+}
+
+div {
+    width: 100%;
+    display: flex;
+    margin-top: 10px;
+}
+
+.right {
+    margin-left: auto;
+}
+
+.meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    white-space: pre;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-gap: 10px;
+    margin-top: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 5px;
+}
+
+td:first-child {
+    width: 30px;
+    background: green;
+    color: #fefefe;
+    border-color: #151515;
+}
+
+td:nth-child(2) {
+    text-align: start;
+    padding-left: 10px;
+}
+
+td:last-child {
+    min-width: 50px;
+}
+
+td {
+    text-align: center;
+}

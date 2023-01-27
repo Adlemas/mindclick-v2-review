@@ -1,0 +1,28 @@
+doctype html
+html
+    head
+        title= title
+        style
+            include style.css
+    body
+        h1= title
+        div
+            p
+                each item in first
+                    span= item
+            p= divider
+            p
+                each item in second
+                    span= item
+            p(class='right') (#{rows.length * rows[0].length} примеров)
+        div(class="meta")
+            p Кол-во правильных   _________________
+            p Время   _________________
+        div(class='content')
+            each row in rows
+                table
+                    each expr, index in row
+                        tr
+                            td= index + 1
+                            td #{expr[0]} #{divider} #{expr[1]}
+                            td
