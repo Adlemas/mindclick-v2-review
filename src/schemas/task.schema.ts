@@ -43,6 +43,10 @@ export class Task {
     required: true,
   })
   assignedTo: mongoose.Schema.Types.ObjectId;
+
+  createdAt: Date;
+
+  updatedAt: Date;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
