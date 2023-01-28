@@ -11,6 +11,7 @@ import { Role } from 'src/enum/role.enum';
 import { GetTasksQueryDto } from 'src/tasks/dto/get-tasks-query.dto';
 import { CompleteTaskDto } from 'src/tasks/dto/complete-task.dto';
 import { Task } from 'src/schemas/task.schema';
+import { RewardService } from 'src/monetization/service/reward.service';
 
 @Injectable()
 export class TasksService {
@@ -22,6 +23,9 @@ export class TasksService {
 
   @Inject(LocaleService)
   private readonly localeService: LocaleService;
+
+  @Inject(RewardService)
+  private readonly rewardService: RewardService;
 
   createTask(user: Observable<User>, dto: CreateTaskDto) {
     const { assignedTo } = dto;
@@ -152,12 +156,12 @@ export class TasksService {
                 .pipe(
                   switchMap((updatedTask) => {
                     if (updatedTask.completed) {
-                      return this.userRepository
-                        .updateById(user._id, {
-                          rate: user.rate + 1,
-                          points:
-                            user.points +
-                            updatedTask.stats.filter((t) => t.isRight).length,
+                      return this.rewardService
+                        .reward(user._id, {
+                          simulator: updatedTask.simulator,
+                          rate: 1,
+                          points: updatedTask.stats.filter((t) => t.isRight)
+                            .length,
                         })
                         .pipe(switchMap(() => of(updatedTask)));
                     }
