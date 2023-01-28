@@ -26,4 +26,19 @@ export class MonetizationService {
       }),
     );
   }
+
+  createUpdateMonetization(
+    user: Observable<User>,
+    dto: Monetization,
+  ): Observable<Monetization> {
+    return user.pipe(
+      switchMap((user) => {
+        return this.userRepository
+          .updateById(user._id, {
+            monetization: dto,
+          })
+          .pipe(switchMap((updatedUser) => of(updatedUser.monetization)));
+      }),
+    );
+  }
 }
