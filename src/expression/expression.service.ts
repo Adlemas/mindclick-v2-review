@@ -1,4 +1,4 @@
-import { Injectable, StreamableFile } from '@nestjs/common';
+import { Inject, Injectable, StreamableFile } from '@nestjs/common';
 
 import { MentalPayloadDto } from 'src/expression/dto/mental-payload.dto';
 import expression from 'src/lib/expression';
@@ -22,9 +22,13 @@ import { MentalResponse } from 'src/expression/interface/mental-response.interfa
 import { ExpressionResponse } from 'src/expression/interface/expression-response.interface';
 import { User } from 'src/schemas/user.schema';
 import { RewardPayloadDto } from 'src/expression/dto/reward-payload.dto';
+import { RewardService } from 'src/monetization/service/reward.service';
 
 @Injectable()
 export class ExpressionService {
+  @Inject(RewardService)
+  private readonly rewardService: RewardService;
+
   generateToken<T>(data: T): string {
     return Buffer.from(JSON.stringify(data)).toString('base64');
   }
@@ -124,7 +128,11 @@ export class ExpressionService {
         const { token, answer, simulator } = payload;
         const decoded = JSON.parse(Buffer.from(token, 'base64').toString());
         if (decoded.answer === answer) {
-          // TODO: Reward user
+          return this.rewardService.reward(user._id, {
+            simulator,
+            points: 1,
+            rate: 0,
+          });
         }
         return of(null);
       }),
