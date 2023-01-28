@@ -1,4 +1,9 @@
-import { Inject, Injectable, StreamableFile } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  StreamableFile,
+} from '@nestjs/common';
 
 import { MentalPayloadDto } from 'src/expression/dto/mental-payload.dto';
 import expression from 'src/lib/expression';
@@ -23,11 +28,15 @@ import { ExpressionResponse } from 'src/expression/interface/expression-response
 import { User } from 'src/schemas/user.schema';
 import { RewardPayloadDto } from 'src/expression/dto/reward-payload.dto';
 import { RewardService } from 'src/monetization/service/reward.service';
+import { LocaleService } from 'src/locale/locale.service';
 
 @Injectable()
 export class ExpressionService {
   @Inject(RewardService)
   private readonly rewardService: RewardService;
+
+  @Inject(LocaleService)
+  private readonly localeService: LocaleService;
 
   generateToken<T>(data: T): string {
     return Buffer.from(JSON.stringify(data)).toString('base64');
@@ -134,7 +143,9 @@ export class ExpressionService {
             rate: 0,
           });
         }
-        return of(null);
+        throw new BadRequestException(
+          this.localeService.translate('errors.wrong_answer'),
+        );
       }),
     );
   }
