@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MonetizationController } from './monetization.controller';
-import { MonetizationService } from './monetization.service';
 import { UsersModule } from 'src/users/users.module';
+import { RewardService } from './service/reward.service';
+import { MonetizationService } from './service/monetization.service';
 
 @Module({
   imports: [UsersModule],
   controllers: [MonetizationController],
-  providers: [MonetizationService],
-  exports: [MonetizationService],
+  providers: [MonetizationService, RewardService],
+  exports: [RewardService],
 })
 export class MonetizationModule {}
