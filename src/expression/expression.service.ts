@@ -20,6 +20,8 @@ import {
 } from 'src/lib/pug-divide-multiply';
 import { MentalResponse } from 'src/expression/interface/mental-response.interface';
 import { ExpressionResponse } from 'src/expression/interface/expression-response.interface';
+import { User } from 'src/schemas/user.schema';
+import { RewardPayloadDto } from 'src/expression/dto/reward-payload.dto';
 
 @Injectable()
 export class ExpressionService {
@@ -114,5 +116,18 @@ export class ExpressionService {
         ),
       ),
     });
+  }
+
+  reward(user: Observable<User>, payload: RewardPayloadDto) {
+    return user.pipe(
+      switchMap((user) => {
+        const { token, answer, simulator } = payload;
+        const decoded = JSON.parse(Buffer.from(token, 'base64').toString());
+        if (decoded.answer === answer) {
+          // TODO: Reward user
+        }
+        return of(null);
+      }),
+    );
   }
 }
