@@ -6,6 +6,7 @@ import { UserRepository } from 'src/users/repository/user.repository';
 import { Schema } from 'mongoose';
 import { LocaleService } from 'src/locale/locale.service';
 import { Role } from 'src/enum/role.enum';
+import { Reward } from 'src/monetization/interface/reward.interface';
 
 @Injectable()
 export class MonetizationService {
@@ -68,7 +69,7 @@ export class MonetizationService {
    * Reward user with specific amount of points & rate
    * Should be called only for users with STUDENT role
    */
-  reward(userId: Schema.Types.ObjectId, rate: number, points: number) {
+  reward(userId: Schema.Types.ObjectId, reward: Reward): Observable<User> {
     return this.userRepository.findById(userId).pipe(
       switchMap((user) => {
         if (!user) {
@@ -81,10 +82,20 @@ export class MonetizationService {
             this.localeService.translate('errors.user_not_student'),
           );
         }
-        return this.userRepository.updateById(userId, {
-          points: user.points + points,
-          rate: user.rate + rate,
-        });
+        return this.userRepository.getUserTeacher(user._id).pipe(
+          switchMap((teacher) => {
+            const { monetization } = teacher;
+            if (monetization.ignoreSimulators.includes(reward.simulator)) {
+              return of(user);
+            }
+            const points = reward.points * monetization.factor;
+            const rate = reward.rate * monetization.factor;
+            return this.userRepository.updateById(user._id, {
+              points: user.points + points,
+              rate: user.rate + rate,
+            });
+          }),
+        );
       }),
     );
   }
