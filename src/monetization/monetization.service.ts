@@ -5,6 +5,7 @@ import { Monetization } from 'src/interface/monetization.interface';
 import { UserRepository } from 'src/users/repository/user.repository';
 import { Schema } from 'mongoose';
 import { LocaleService } from 'src/locale/locale.service';
+import { Role } from 'src/enum/role.enum';
 
 @Injectable()
 export class MonetizationService {
@@ -73,6 +74,11 @@ export class MonetizationService {
         if (!user) {
           throw new ForbiddenException(
             this.localeService.translate('errors.user_not_found'),
+          );
+        }
+        if (user.role !== Role.STUDENT) {
+          throw new ForbiddenException(
+            this.localeService.translate('errors.user_not_student'),
           );
         }
         return this.userRepository.updateById(userId, {
