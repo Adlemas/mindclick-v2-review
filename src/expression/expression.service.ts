@@ -13,17 +13,33 @@ import divide from 'src/lib/divide';
 import { MentalDocumentPayloadDto } from 'src/expression/dto/mental-documet-query.dto';
 import pdfGenerate from 'src/lib/pdf-generate';
 import { from, Observable, of, switchMap } from 'rxjs';
-import { GenerateOptions } from 'src/lib/pug-divide-multiply';
 import {
   divide as divideDoc,
+  GenerateOptions,
   multiply as multiplyDoc,
 } from 'src/lib/pug-divide-multiply';
+import { MentalResponse } from 'src/expression/interface/mental-response.interface';
+import { ExpressionResponse } from 'src/expression/interface/expression-response.interface';
 
 @Injectable()
 export class ExpressionService {
-  mental(payload: MentalPayloadDto): number[] {
+  generateToken<T>(data: T): string {
+    return Buffer.from(JSON.stringify(data)).toString('base64');
+  }
+
+  generateResponse<T>(data: T): ExpressionResponse & T {
+    return {
+      token: this.generateToken(data),
+      ...data,
+    };
+  }
+
+  mental(payload: MentalPayloadDto): MentalResponse {
     const { formula, terms, min, max, isBiggerMax } = payload;
-    return expression(formula, terms, min, max, isBiggerMax);
+    const expr = expression(formula, terms, min, max, isBiggerMax);
+    return this.generateResponse({
+      expression: expr,
+    });
   }
 
   mentalDocument(
@@ -72,11 +88,15 @@ export class ExpressionService {
 
   multiply(payload: MultiplyPayloadDto): MultiplyResponse {
     const { first, second } = payload;
-    return multiply(first[0].length, second[0].length, first, second);
+    return this.generateResponse({
+      ...multiply(first[0].length, second[0].length, first, second),
+    });
   }
 
   divide(payload: DividePayloadDto): DivideResponse {
     const { first, second, remainder } = payload;
-    return divide(first, second, { remainder: remainder ?? 0 });
+    return this.generateResponse({
+      ...divide(first, second, { remainder: remainder ?? 0 }),
+    });
   }
 }
