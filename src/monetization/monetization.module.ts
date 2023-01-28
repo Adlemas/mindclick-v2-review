@@ -7,5 +7,6 @@ import { UsersModule } from 'src/users/users.module';
   imports: [UsersModule],
   controllers: [MonetizationController],
   providers: [MonetizationService],
+  exports: [MonetizationService],
 })
 export class MonetizationModule {}
