@@ -27,7 +27,9 @@ export class ExpressionService {
     return Buffer.from(JSON.stringify(data)).toString('base64');
   }
 
-  generateResponse<T>(data: T): ExpressionResponse & T {
+  generateResponse<T extends { answer: string }>(
+    data: T,
+  ): ExpressionResponse & T {
     return {
       token: this.generateToken(data),
       ...data,
@@ -39,6 +41,7 @@ export class ExpressionService {
     const expr = expression(formula, terms, min, max, isBiggerMax);
     return this.generateResponse({
       expression: expr,
+      answer: expr.reduce((sum, curr) => sum + curr, 0).toString(),
     });
   }
 
@@ -88,15 +91,28 @@ export class ExpressionService {
 
   multiply(payload: MultiplyPayloadDto): MultiplyResponse {
     const { first, second } = payload;
+    const generated = multiply(
+      first[0].length,
+      second[0].length,
+      first,
+      second,
+    );
     return this.generateResponse({
-      ...multiply(first[0].length, second[0].length, first, second),
+      ...generated,
+      answer: String(generated.first * generated.second),
     });
   }
 
   divide(payload: DividePayloadDto): DivideResponse {
     const { first, second, remainder } = payload;
+    const generated = divide(first, second, { remainder: remainder ?? 0 });
     return this.generateResponse({
-      ...divide(first, second, { remainder: remainder ?? 0 }),
+      ...generated,
+      answer: String(
+        Math.floor(
+          parseInt(generated.first, 10) / parseInt(generated.second, 10),
+        ),
+      ),
     });
   }
 }
