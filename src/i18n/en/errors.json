@@ -7,5 +7,6 @@
   "user_not_found": "User not found",
   "group_not_empty": "Group is not empty",
   "user_not_student": "User is not a student",
-  "wrong_answer": "Wrong answer"
+  "wrong_answer": "Wrong answer",
+  "invalid_token": "Invalid token"
 }

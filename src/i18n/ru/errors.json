@@ -7,5 +7,6 @@
   "user_not_found": "Пользователь не найден",
   "group_not_empty": "Группа не пуста",
   "user_not_student": "Пользователь не является студентом",
-  "wrong_answer": "Неверный ответ"
+  "wrong_answer": "Неверный ответ",
+  "invalid_token": "Токен недействителен"
 }
