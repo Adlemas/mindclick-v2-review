@@ -15,5 +15,6 @@
   "ARRAY_MIN_SIZE": "{property} must contain at least {constraints.0} items",
   "ARRAY_MAX_SIZE": "{property} must contain at most {constraints.0} items",
   "NOT_ENUM": "{property} must be one of the following values: {constraints.1}",
-  "NOT_OBJECT": "{property} must be an object"
+  "NOT_OBJECT": "{property} must be an object",
+  "NOT_BASE64": "{property} must be a base64 string"
 }

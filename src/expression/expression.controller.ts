@@ -5,6 +5,7 @@ import {
   Inject,
   Post,
   Query,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -21,6 +22,7 @@ import { MentalDocumentPayloadDto } from 'src/expression/dto/mental-documet-quer
 import type { Response } from 'express';
 import { MultiplyDocumentPayloadDto } from 'src/expression/dto/multiply-document-payload.dto';
 import { DivideDocumentPayloadDto } from 'src/expression/dto/divide-document-payload.dto';
+import { RewardPayloadDto } from 'src/expression/dto/reward-payload.dto';
 
 @Controller('expression')
 export class ExpressionController {
@@ -111,5 +113,11 @@ export class ExpressionController {
         columns: dto.columns,
       },
     );
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Post('reward')
+  reward(@Req() req, @Body() dto: RewardPayloadDto) {
+    return this.expressionService.reward(req.user, dto);
   }
 }
