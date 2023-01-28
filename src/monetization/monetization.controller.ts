@@ -40,7 +40,7 @@ export class MonetizationController {
   @Roles(Role.TEACHER)
   @UseGuards(AccessTokenGuard, RolesGuard)
   @Delete()
-  resetMonetization() {
-    return null;
+  resetMonetization(@Req() req) {
+    return this.monetizationService.resetMonetization(req.user);
   }
 }
