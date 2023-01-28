@@ -151,7 +151,12 @@ export class ExpressionService {
     return user.pipe(
       switchMap((user) => {
         const { token, answer, simulator } = payload;
-        const decoded = JSON.parse(Buffer.from(token, 'base64').toString());
+        const decoded = this.decodeToken(token);
+        if (new Date(decoded.expires) < new Date()) {
+          throw new BadRequestException(
+            this.localeService.translate('errors.token_expired'),
+          );
+        }
         if (decoded.answer === answer) {
           return this.rewardService.reward(user._id, {
             simulator,
