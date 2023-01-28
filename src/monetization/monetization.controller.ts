@@ -30,8 +30,11 @@ export class MonetizationController {
   @Roles(Role.TEACHER)
   @UseGuards(AccessTokenGuard, RolesGuard)
   @Post()
-  createUpdateMonetization(@Body() dto: CreateUpdateMonetizationDto) {
-    return dto;
+  createUpdateMonetization(
+    @Req() req,
+    @Body() dto: CreateUpdateMonetizationDto,
+  ) {
+    return this.monetizationService.createUpdateMonetization(req.user, dto);
   }
 
   @Roles(Role.TEACHER)
