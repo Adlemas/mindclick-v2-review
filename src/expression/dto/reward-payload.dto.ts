@@ -1,5 +1,6 @@
-import { IsBase64, IsString } from 'class-validator';
+import { IsBase64, IsEnum, IsString } from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
+import { Simulator } from 'src/enum/simulator.enum';
 
 export class RewardPayloadDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
@@ -8,4 +9,7 @@ export class RewardPayloadDto {
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   answer: string;
+
+  @IsEnum(Simulator, { message: i18nValidationMessage('validation.NOT_ENUM') })
+  simulator: Simulator;
 }
