@@ -8,5 +8,6 @@
   "group_not_empty": "Группа не пуста",
   "user_not_student": "Пользователь не является студентом",
   "wrong_answer": "Неверный ответ",
-  "invalid_token": "Токен недействителен"
+  "invalid_token": "Токен недействителен",
+  "token_expired": "Токен просрочен"
 }
