@@ -41,4 +41,19 @@ export class MonetizationService {
       }),
     );
   }
+
+  resetMonetization(user: Observable<User>): Observable<Monetization> {
+    return user.pipe(
+      switchMap((user) => {
+        return this.userRepository
+          .updateById(user._id, {
+            monetization: {
+              ignoreSimulators: [],
+              factor: 1,
+            },
+          })
+          .pipe(switchMap((updatedUser) => of(updatedUser.monetization)));
+      }),
+    );
+  }
 }
