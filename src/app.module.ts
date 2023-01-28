@@ -10,6 +10,7 @@ import { GroupsModule } from './groups/groups.module';
 import { ExpressionModule } from './expression/expression.module';
 import { TasksModule } from './tasks/tasks.module';
 import { PaginationModule } from './pagination/pagination.module';
+import { MonetizationModule } from './monetization/monetization.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { PaginationModule } from './pagination/pagination.module';
     ExpressionModule,
     TasksModule,
     PaginationModule,
+    MonetizationModule,
   ],
   providers: [AppService],
 })
