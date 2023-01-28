@@ -13,7 +13,7 @@ import { Role } from 'src/enum/role.enum';
 import { AccessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { RolesGuard } from 'src/users/guard/roles.guard';
 import { CreateUpdateMonetizationDto } from 'src/monetization/dto/create-update-monetization.dto';
-import { MonetizationService } from 'src/monetization/monetization.service';
+import { MonetizationService } from 'src/monetization/service/monetization.service';
 
 @Controller('monetization')
 export class MonetizationController {
