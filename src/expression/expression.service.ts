@@ -39,7 +39,13 @@ export class ExpressionService {
   private readonly localeService: LocaleService;
 
   generateToken<T>(data: T): string {
-    return Buffer.from(JSON.stringify(data)).toString('base64');
+    return Buffer.from(
+      JSON.stringify({
+        ...data,
+        // ISO 8601 expiration date after 1 minute
+        expires: new Date(Date.now() + 60000).toISOString(),
+      }),
+    ).toString('base64');
   }
 
   generateResponse<T extends { answer: string }>(
@@ -49,6 +55,16 @@ export class ExpressionService {
       token: this.generateToken(data),
       ...data,
     };
+  }
+
+  decodeToken<T>(token: string): ExpressionResponse & T & { expires: string } {
+    try {
+      return JSON.parse(Buffer.from(token, 'base64').toString());
+    } catch (e) {
+      throw new BadRequestException(
+        this.localeService.translate('errors.invalid_token'),
+      );
+    }
   }
 
   mental(payload: MentalPayloadDto): MentalResponse {
