@@ -10,6 +10,7 @@ import {
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { Type } from 'class-transformer';
 import { Schema } from 'mongoose';
+import { Monetization } from 'src/interface/monetization.interface';
 
 export class UpdateUserParamDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
@@ -63,4 +64,5 @@ export class UpdateUserDto {
   points?: number;
 
   refreshToken?: string;
+  monetization?: Monetization;
 }
