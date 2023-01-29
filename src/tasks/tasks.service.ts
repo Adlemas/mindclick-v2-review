@@ -12,6 +12,7 @@ import { GetTasksQueryDto } from 'src/tasks/dto/get-tasks-query.dto';
 import { CompleteTaskDto } from 'src/tasks/dto/complete-task.dto';
 import { Task } from 'src/schemas/task.schema';
 import { RewardService } from 'src/monetization/service/reward.service';
+import moment from 'moment';
 
 @Injectable()
 export class TasksService {
@@ -156,6 +157,9 @@ export class TasksService {
                 .pipe(
                   switchMap((updatedTask) => {
                     if (updatedTask.completed) {
+                      // check if task is expired
+                      if (moment(updatedTask.expiresAt).isBefore(moment()))
+                        return of(updatedTask);
                       return this.rewardService
                         .reward(user._id, {
                           simulator: updatedTask.simulator,
