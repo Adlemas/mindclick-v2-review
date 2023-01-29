@@ -11,6 +11,7 @@ import { ExpressionModule } from './expression/expression.module';
 import { TasksModule } from './tasks/tasks.module';
 import { PaginationModule } from './pagination/pagination.module';
 import { MonetizationModule } from './monetization/monetization.module';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { MonetizationModule } from './monetization/monetization.module';
     TasksModule,
     PaginationModule,
     MonetizationModule,
+    StorageModule,
   ],
   providers: [AppService],
 })
