@@ -1,7 +1,7 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from 'src/schemas/user.schema';
-import { Model, Schema } from 'mongoose';
+import { FilterQuery, Model, Schema } from 'mongoose';
 import { from, Observable, of, switchMap } from 'rxjs';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -11,6 +11,9 @@ import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/role.enum';
 import { Group } from 'src/schemas/group.schema';
 import { Rank } from 'src/users/interface/rank.interface';
+import { PaginationService } from 'src/pagination/pagination.service';
+import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
+import { PaginatedResponse } from 'src/interface/paginated-response.interface';
 
 @Injectable()
 export class UserRepository {
@@ -22,6 +25,9 @@ export class UserRepository {
 
   @Inject(LocaleService)
   private readonly localeService: LocaleService;
+
+  @Inject(PaginationService)
+  private readonly paginationService: PaginationService;
 
   createUser(
     userId: Schema.Types.ObjectId,
@@ -63,6 +69,17 @@ export class UserRepository {
             );
           }),
         );
+      }),
+    );
+  }
+
+  getWithPagination(
+    filter: FilterQuery<User>,
+    pagination: PaginationQueryDto,
+  ): Observable<PaginatedResponse<Array<User>>> {
+    return from(
+      this.paginationService.paginate(this.userModel, pagination, {
+        filter,
       }),
     );
   }
