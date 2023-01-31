@@ -7,4 +7,8 @@ export class GetMembersDto extends PaginationQueryDto {
   @IsMongoId({ message: i18nValidationMessage('validation.NOT_MONGO_ID') })
   @IsOptional()
   groupId?: string;
+
+  @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
+  @IsOptional()
+  query?: string;
 }
