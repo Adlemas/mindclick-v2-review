@@ -16,6 +16,7 @@ import { UsersService } from 'src/users/users.service';
 import { LocaleService } from 'src/locale/locale.service';
 import { Role } from 'src/enum/role.enum';
 import { GetMembersDto } from 'src/groups/dto/get-members.dto';
+import escapeRegExp from 'src/utils/escapeRegExp';
 
 @Injectable()
 export class GroupsService {
@@ -122,6 +123,24 @@ export class GroupsService {
             group: groupId
               ? groupId
               : { $in: groups.map((group) => group._id) },
+            ...(dto.query
+              ? {
+                  $or: [
+                    {
+                      email: new RegExp(escapeRegExp(dto.query), 'i'),
+                    },
+                    {
+                      firstName: new RegExp(escapeRegExp(dto.query), 'i'),
+                    },
+                    {
+                      lastName: new RegExp(escapeRegExp(dto.query), 'i'),
+                    },
+                    {
+                      phone: new RegExp(escapeRegExp(dto.query), 'i'),
+                    },
+                  ],
+                }
+              : {}),
           },
           pagination,
         );
