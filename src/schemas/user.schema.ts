@@ -179,10 +179,18 @@ export class User {
     type: mongoose.Schema.Types.ObjectId,
     ref: Group.name,
   })
-  group: mongoose.Schema.Types.ObjectId;
+  groupId: mongoose.Schema.Types.ObjectId;
 
   @Prop()
   refreshToken?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+// Virtual for group fetching by group id and populating it
+UserSchema.virtual('group', {
+  ref: Group.name,
+  localField: 'groupId',
+  foreignField: '_id',
+  justOne: true,
+});

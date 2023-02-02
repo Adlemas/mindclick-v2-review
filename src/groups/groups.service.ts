@@ -47,7 +47,7 @@ export class GroupsService {
           return this.groupRepository.getUserGroups(user._id);
         }
         if (user.role === Role.STUDENT) {
-          return this.groupRepository.getGroup(user.group);
+          return this.groupRepository.getGroup(user.groupId);
         }
         throw new ForbiddenException(
           this.localeService.translate('errors.forbidden'),
@@ -120,7 +120,7 @@ export class GroupsService {
       switchMap((groups: Array<Group>) => {
         return this.usersService.find(
           {
-            group: groupId
+            groupId: groupId
               ? groupId
               : { $in: groups.map((group) => group._id) },
             ...(dto.query

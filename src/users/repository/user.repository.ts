@@ -56,7 +56,7 @@ export class UserRepository {
                     ...createUserDto,
                     password: hashedPassword,
                     role: Role.STUDENT,
-                    group: group._id,
+                    groupId: group._id,
                   }),
                 ).pipe(
                   switchMap((createdUser) => {
@@ -97,7 +97,7 @@ export class UserRepository {
             this.localeService.translate('errors.forbidden'),
           );
         }
-        return from(this.groupRepository.findGroupById(user.group)).pipe(
+        return from(this.groupRepository.findGroupById(user.groupId)).pipe(
           switchMap((group) => {
             if (!group) {
               throw new ForbiddenException(
@@ -140,7 +140,7 @@ export class UserRepository {
     return from(
       this.userModel
         .count({
-          group: groupId,
+          groupId: groupId,
         })
         .exec(),
     );
@@ -160,9 +160,11 @@ export class UserRepository {
         }
         return from(this.groupRepository.getUserGroups(userId)).pipe(
           switchMap((groups) => {
+            console.log(targetUser);
             if (
               !groups.some(
-                (group) => group._id.toString() === targetUser.group.toString(),
+                (group) =>
+                  group._id.toString() === targetUser.groupId.toString(),
               ) ||
               !groups.some(
                 (group) => group._id.toString() === groupId.toString(),
@@ -212,7 +214,7 @@ export class UserRepository {
           this.userModel
             .updateMany(
               {
-                group: groupId,
+                groupId: groupId,
               },
               {
                 group: targetGroupId,
@@ -235,7 +237,7 @@ export class UserRepository {
     return from(
       this.userModel
         .find(
-          { group: { $in: groups.map((g) => g._id) } },
+          { groupId: { $in: groups.map((g) => g._id) } },
           { rate: 1, points: 1 },
         )
         .exec(),
