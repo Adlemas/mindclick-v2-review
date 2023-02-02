@@ -9,12 +9,21 @@ import { Portfolio } from 'src/interface/portfolio.interface';
 import { Monetization } from 'src/interface/monetization.interface';
 import { Plan } from 'src/interface/plan.interface';
 import { Group } from 'src/schemas/group.schema';
+import { Type } from 'class-transformer';
 
 export type UserDocument = HydratedDocument<User>;
 
 @Schema({
   timestamps: {
     createdAt: 'createdAt',
+  },
+  toJSON: {
+    virtuals: true,
+    getters: true,
+  },
+  toObject: {
+    virtuals: true,
+    getters: true,
   },
 })
 export class User {
@@ -183,6 +192,9 @@ export class User {
 
   @Prop()
   refreshToken?: string;
+
+  @Type(() => Group)
+  group: Group;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
@@ -193,4 +205,9 @@ UserSchema.virtual('group', {
   localField: 'groupId',
   foreignField: '_id',
   justOne: true,
+});
+
+UserSchema.pre('findOne', function (this: any, next) {
+  this.populate('group');
+  next();
 });
