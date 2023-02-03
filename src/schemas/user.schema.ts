@@ -207,7 +207,7 @@ UserSchema.virtual('group', {
   justOne: true,
 });
 
-UserSchema.pre('findOne', function (this: any, next) {
+UserSchema.pre(['findOne', 'find'], function (this: any, next) {
   this.populate('group');
   next();
 });
