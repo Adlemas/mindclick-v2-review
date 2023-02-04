@@ -5,4 +5,8 @@ export class CreateGroupDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsNotEmpty({ message: i18nValidationMessage('validation.NOT_EMPTY') })
   name: string;
+
+  @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
+  @IsNotEmpty({ message: i18nValidationMessage('validation.NOT_EMPTY') })
+  color: string;
 }

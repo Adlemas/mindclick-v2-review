@@ -33,7 +33,13 @@ export class GroupsController {
   @UseGuards(AccessTokenGuard, RolesGuard)
   @Post()
   addGroup(@Req() req, @Body() createGroupDto: CreateGroupDto) {
-    return this.groupsService.addGroup(createGroupDto, req.user);
+    return this.groupsService.addGroup(
+      {
+        name: createGroupDto.name,
+        color: createGroupDto.color,
+      },
+      req.user,
+    );
   }
 
   @UseGuards(AccessTokenGuard)
