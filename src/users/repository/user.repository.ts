@@ -80,6 +80,9 @@ export class UserRepository {
     return from(
       this.paginationService.paginate(this.userModel, pagination, {
         filter,
+        sort: {
+          createdAt: -1,
+        },
       }),
     );
   }
