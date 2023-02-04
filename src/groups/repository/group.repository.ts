@@ -33,6 +33,7 @@ export class GroupRepository {
         .find({
           owner: userId,
         })
+        .sort({ createdAt: -1 })
         .exec(),
     );
   }
