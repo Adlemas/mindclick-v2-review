@@ -163,7 +163,6 @@ export class UserRepository {
         }
         return from(this.groupRepository.getUserGroups(userId)).pipe(
           switchMap((groups) => {
-            console.log(targetUser);
             if (
               !groups.some(
                 (group) =>

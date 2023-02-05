@@ -106,7 +106,6 @@ export class ExpressionService {
       ),
     ).pipe(
       switchMap((stream) => {
-        console.log({ stream });
         return of(new StreamableFile(stream));
       }),
     );
