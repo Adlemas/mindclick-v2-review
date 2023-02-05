@@ -62,6 +62,7 @@ export class GroupsController {
     return this.groupsService.updateGroupByOwner(req.user, {
       groupId: updateGroupDto.groupId,
       name: updateGroupDto.name,
+      color: updateGroupDto.color,
     });
   }
 
