@@ -9,6 +9,7 @@ import { LocaleService } from 'src/locale/locale.service';
 import { Role } from 'src/enum/role.enum';
 import { Rank } from 'src/users/interface/rank.interface';
 import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
+import { CreateAdminDto } from 'src/admin/dto/create-admin.dto';
 
 @Injectable()
 export class UsersService {
@@ -126,6 +127,10 @@ export class UsersService {
         return this.userRepository.createUser(u._id, dto);
       }),
     );
+  }
+
+  createTeacher(dto: CreateAdminDto) {
+    return this.userRepository.createTeacher(dto);
   }
 
   getMyRank(user: Observable<User>): Observable<Rank> {
