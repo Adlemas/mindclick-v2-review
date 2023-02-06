@@ -44,6 +44,16 @@ export class AdminController {
     @Param() { id }: UpdateAdminParamsDto,
     @Body() dto: UpdateAdminDto,
   ) {
-    return this.adminService.updateUser(req.user, id, dto);
+    return this.adminService.updateUser(req.user, id, {
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      address: dto.address,
+      city: dto.city,
+      birthDate: dto.birthDate,
+      plan: dto.plan,
+      description: dto.description,
+      phone: dto.phone,
+      status: dto.status,
+    });
   }
 }
