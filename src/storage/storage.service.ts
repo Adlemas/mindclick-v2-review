@@ -1,9 +1,5 @@
-import AWS3 from 'aws-sdk/clients/s3';
-import {
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { S3 } from 'aws-sdk';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from 'src/config/config.service';
 import { from, Observable } from 'rxjs';
 import { PromiseResult } from 'aws-sdk/lib/request';
@@ -13,14 +9,14 @@ import { Readable } from 'node:stream';
 
 @Injectable()
 export class StorageService {
-  @Inject(ConfigService)
   private configService: ConfigService;
 
-  private S3: AWS3;
+  private S3: S3;
   private readonly BUCKET: string;
 
   constructor() {
-    this.S3 = new AWS3({
+    this.configService = new ConfigService();
+    this.S3 = new S3({
       accessKeyId: this.configService.getAwsAccessKey(),
       secretAccessKey: this.configService.getAwsSecretKey(),
       s3ForcePathStyle: true,
@@ -31,7 +27,7 @@ export class StorageService {
 
   getBlob(
     key: string,
-  ): Observable<PromiseResult<AWS3.GetObjectOutput, AWSError>> {
+  ): Observable<PromiseResult<S3.GetObjectOutput, AWSError>> {
     const params = {
       Bucket: this.BUCKET,
       Key: key,
@@ -43,7 +39,7 @@ export class StorageService {
   putBlob(
     blobName: string,
     blob: Buffer,
-  ): Observable<PromiseResult<AWS3.PutObjectOutput, AWSError>> {
+  ): Observable<PromiseResult<S3.PutObjectOutput, AWSError>> {
     const params = {
       Bucket: this.BUCKET,
       Key: blobName,
@@ -52,8 +48,8 @@ export class StorageService {
     return from(this.S3.putObject(params).promise());
   }
 
-  putStream(key: string, stream: Readable): Observable<AWS3.PutObjectOutput> {
-    return new Observable<AWS3.PutObjectOutput>(({ next, complete }) => {
+  putStream(key: string, stream: Readable): Observable<S3.PutObjectOutput> {
+    return new Observable<S3.PutObjectOutput>(({ next, complete }) => {
       const chunks: Buffer[] = [];
 
       stream.on('data', (chunk: Buffer) => {
