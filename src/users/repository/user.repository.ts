@@ -31,13 +31,32 @@ export class UserRepository {
   @Inject(PaginationService)
   private readonly paginationService: PaginationService;
 
-  createTeacher(dto: CreateAdminDto): Observable<User> {
-    return from(
-      this.userModel.create({
-        ...dto,
-        plan: Plans[dto.plan],
-
-        role: Role.TEACHER,
+  createTeacher(dto: CreateAdminDto): Observable<Omit<User, 'password'>> {
+    return from(this.userModel.findOne({ email: dto.email })).pipe(
+      switchMap((userExists) => {
+        if (userExists) {
+          throw new ForbiddenException(
+            this.localeService.translate('errors.email_exists'),
+          );
+        }
+        return from(bcrypt.hash(dto.password, 10)).pipe(
+          switchMap((hashedPassword) => {
+            return from(
+              this.userModel.create({
+                ...dto,
+                plan: Plans[dto.plan],
+                password: hashedPassword,
+                role: Role.TEACHER,
+              }),
+            ).pipe(
+              switchMap((createdUser) => {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { password, ...rest } = createdUser.toObject();
+                return of(rest);
+              }),
+            );
+          }),
+        );
       }),
     );
   }
