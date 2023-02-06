@@ -8,6 +8,7 @@ import { CreateAdminDto } from 'src/admin/dto/create-admin.dto';
 import { UpdateAdminDto } from 'src/admin/dto/update-admin.dto';
 import { LocaleService } from 'src/locale/locale.service';
 import { GetAdminsQueryDto } from 'src/admin/dto/get-admins.dto';
+import escapeRegExp from 'src/utils/escapeRegExp';
 
 @Injectable()
 export class AdminService {
@@ -74,9 +75,18 @@ export class AdminService {
               createdBy: user._id,
               ...(pagination.query && {
                 $or: [
-                  { name: { $regex: pagination.query, $options: 'i' } },
-                  { email: { $regex: pagination.query, $options: 'i' } },
-                  { phone: { $regex: pagination.query, $options: 'i' } },
+                  {
+                    firstName: new RegExp(escapeRegExp(pagination.query), 'i'),
+                  },
+                  {
+                    lastName: new RegExp(escapeRegExp(pagination.query), 'i'),
+                  },
+                  {
+                    email: new RegExp(escapeRegExp(pagination.query), 'i'),
+                  },
+                  {
+                    phone: new RegExp(escapeRegExp(pagination.query), 'i'),
+                  },
                 ],
               }),
               ...(pagination.status && { status: pagination.status }),
