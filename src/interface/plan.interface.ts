@@ -1,5 +1,7 @@
+import { PlanType } from 'src/enum/plan.enum';
+
 export interface Plan {
-  id: string;
+  id: PlanType;
   name: string;
   price: number;
   maxMembers: number;
