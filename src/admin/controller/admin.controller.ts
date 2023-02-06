@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
@@ -19,6 +20,7 @@ import {
   UpdateAdminDto,
   UpdateAdminParamsDto,
 } from 'src/admin/dto/update-admin.dto';
+import { DeleteAdminParamsDto } from 'src/admin/dto/delete-admin.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -55,5 +57,11 @@ export class AdminController {
       phone: dto.phone,
       status: dto.status,
     });
+  }
+
+  @UseGuards(AccessTokenGuard, AdminUserGuard)
+  @Delete('users/:id')
+  deleteUser(@Req() req, @Param() { id }: DeleteAdminParamsDto) {
+    return this.adminService.deleteUser(req.user, id);
   }
 }
