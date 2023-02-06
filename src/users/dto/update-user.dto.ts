@@ -65,4 +65,5 @@ export class UpdateUserDto {
 
   refreshToken?: string;
   monetization?: Monetization;
+  lastLogin?: Date;
 }

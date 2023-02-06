@@ -106,6 +106,13 @@ export class UsersService {
     return this.userRepository.updateById(user._id, user);
   }
 
+  updateByIdWithoutGroup(
+    userId: Schema.Types.ObjectId,
+    updateUserDto: UpdateUserDto,
+  ) {
+    return this.userRepository.updateById(userId, updateUserDto);
+  }
+
   getGroupUsersCount(groupId: Schema.Types.ObjectId) {
     return this.userRepository.getGroupUsersCount(groupId);
   }

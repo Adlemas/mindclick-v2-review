@@ -46,7 +46,15 @@ export class AuthService {
               if (isMatch) {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const { password, ...result } = user.toObject();
-                return of(result);
+                return from(
+                  this.usersService.updateByIdWithoutGroup(user._id, {
+                    lastLogin: new Date(),
+                  }),
+                ).pipe(
+                  switchMap(() => {
+                    return of(result);
+                  }),
+                );
               }
               throw new BadRequestException(
                 this.localeService.translate('auth.incPass'),
