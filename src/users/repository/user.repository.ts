@@ -133,7 +133,7 @@ export class UserRepository {
       this.paginationService.paginate(this.userModel, pagination, {
         filter,
         sort: {
-          createdAt: -1,
+          updatedAt: -1,
         },
       }),
     );
