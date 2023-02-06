@@ -218,3 +218,22 @@ UserSchema.pre(['findOne', 'find'], function (this: any, next) {
   this.populate('group');
   next();
 });
+
+UserSchema.pre(
+  [
+    'findOne',
+    'find',
+    'findOneAndDelete',
+    'findOneAndReplace',
+    'findOneAndRemove',
+    'findOneAndUpdate',
+    'updateOne',
+    'update',
+    'updateMany',
+  ],
+  function (this: any, next) {
+    // remove password field
+    this.select('-password');
+    next();
+  },
+);
