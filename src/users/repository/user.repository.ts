@@ -34,7 +34,16 @@ export class UserRepository {
 
   updateTeacher(userId: Schema.Types.ObjectId, dto: UpdateAdminDto) {
     return from(
-      this.userModel.findByIdAndUpdate(userId, dto, { new: true }).exec(),
+      this.userModel
+        .findByIdAndUpdate(
+          userId,
+          {
+            ...dto,
+            plan: Plans[dto.plan],
+          },
+          { new: true },
+        )
+        .exec(),
     );
   }
 
