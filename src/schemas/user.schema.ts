@@ -232,8 +232,10 @@ UserSchema.pre(
     'updateMany',
   ],
   function (this: any, next) {
-    // remove password field
-    this.select('-password');
+    if (!this.options.withPassword) {
+      // remove password field
+      this.select('-password');
+    }
     next();
   },
 );

@@ -32,9 +32,12 @@ export class AuthService {
     pass: string,
   ): Observable<Omit<User, 'password'>> {
     return from(
-      this.usersService.findOne({
-        email,
-      }),
+      this.usersService.findOne(
+        {
+          email,
+        },
+        true,
+      ),
     ).pipe(
       switchMap((user) => {
         if (user) {

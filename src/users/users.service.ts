@@ -20,8 +20,8 @@ export class UsersService {
   @Inject(LocaleService)
   private readonly localeService: LocaleService;
 
-  findOne(filter: Partial<User>) {
-    return this.userRepository.findOne(filter);
+  findOne(filter: Partial<User>, withPassword = false) {
+    return this.userRepository.findOne(filter, withPassword);
   }
 
   find(filter: FilterQuery<User>, pagination: PaginationQueryDto) {

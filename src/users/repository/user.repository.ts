@@ -157,8 +157,11 @@ export class UserRepository {
     return from(this.userModel.findByIdAndDelete(userId).exec());
   }
 
-  findOne(filter: Partial<User>): Observable<UserDocument> {
-    return from(this.userModel.findOne(filter).exec());
+  findOne(
+    filter: Partial<User>,
+    withPassword = false,
+  ): Observable<UserDocument> {
+    return from(this.userModel.findOne(filter, undefined, { withPassword }));
   }
 
   findById(userId: Schema.Types.ObjectId): Observable<User> {
