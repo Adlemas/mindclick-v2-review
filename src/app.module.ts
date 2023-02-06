@@ -12,6 +12,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { PaginationModule } from './pagination/pagination.module';
 import { MonetizationModule } from './monetization/monetization.module';
 import { StorageModule } from './storage/storage.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { StorageModule } from './storage/storage.module';
     PaginationModule,
     MonetizationModule,
     StorageModule,
+    AdminModule,
   ],
   providers: [AppService],
 })

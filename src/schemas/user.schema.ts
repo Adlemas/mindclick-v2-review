@@ -16,6 +16,7 @@ export type UserDocument = HydratedDocument<User>;
 @Schema({
   timestamps: {
     createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
   },
   toJSON: {
     virtuals: true,
@@ -184,6 +185,13 @@ export class User {
   })
   createdAt: Date;
 
+  // updatedAt: Date;
+  @Prop({
+    type: Date,
+    default: null,
+  })
+  updatedAt: Date | null;
+
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: Group.name,
@@ -195,6 +203,13 @@ export class User {
 
   @Type(() => Group)
   group: Group;
+
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User.name,
+    default: null,
+  })
+  createdBy: mongoose.Schema.Types.ObjectId | null;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
@@ -211,3 +226,24 @@ UserSchema.pre(['findOne', 'find'], function (this: any, next) {
   this.populate('group');
   next();
 });
+
+UserSchema.pre(
+  [
+    'findOne',
+    'find',
+    'findOneAndDelete',
+    'findOneAndReplace',
+    'findOneAndRemove',
+    'findOneAndUpdate',
+    'updateOne',
+    'update',
+    'updateMany',
+  ],
+  function (this: any, next) {
+    if (!this.options.withPassword) {
+      // remove password field
+      this.select('-password');
+    }
+    next();
+  },
+);

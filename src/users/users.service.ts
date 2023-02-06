@@ -9,6 +9,8 @@ import { LocaleService } from 'src/locale/locale.service';
 import { Role } from 'src/enum/role.enum';
 import { Rank } from 'src/users/interface/rank.interface';
 import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
+import { CreateAdminDto } from 'src/admin/dto/create-admin.dto';
+import { UpdateAdminDto } from 'src/admin/dto/update-admin.dto';
 
 @Injectable()
 export class UsersService {
@@ -18,8 +20,8 @@ export class UsersService {
   @Inject(LocaleService)
   private readonly localeService: LocaleService;
 
-  findOne(filter: Partial<User>) {
-    return this.userRepository.findOne(filter);
+  findOne(filter: Partial<User>, withPassword = false) {
+    return this.userRepository.findOne(filter, withPassword);
   }
 
   find(filter: FilterQuery<User>, pagination: PaginationQueryDto) {
@@ -126,6 +128,18 @@ export class UsersService {
         return this.userRepository.createUser(u._id, dto);
       }),
     );
+  }
+
+  updateTeacher(userId: Schema.Types.ObjectId, dto: UpdateAdminDto) {
+    return this.userRepository.updateTeacher(userId, dto);
+  }
+
+  deleteTeacher(userId: Schema.Types.ObjectId) {
+    return this.userRepository.deleteTeacher(userId);
+  }
+
+  createTeacher(dto: CreateAdminDto) {
+    return this.userRepository.createTeacher(dto);
   }
 
   getMyRank(user: Observable<User>): Observable<Rank> {

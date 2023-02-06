@@ -14,6 +14,9 @@ import { Rank } from 'src/users/interface/rank.interface';
 import { PaginationService } from 'src/pagination/pagination.service';
 import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 import { PaginatedResponse } from 'src/interface/paginated-response.interface';
+import { CreateAdminDto } from 'src/admin/dto/create-admin.dto';
+import Plans from 'src/constants/plans';
+import { UpdateAdminDto } from 'src/admin/dto/update-admin.dto';
 
 @Injectable()
 export class UserRepository {
@@ -28,6 +31,55 @@ export class UserRepository {
 
   @Inject(PaginationService)
   private readonly paginationService: PaginationService;
+
+  updateTeacher(userId: Schema.Types.ObjectId, dto: UpdateAdminDto) {
+    return from(
+      this.userModel
+        .findByIdAndUpdate(
+          userId,
+          {
+            ...dto,
+            plan: Plans[dto.plan],
+          },
+          { new: true },
+        )
+        .exec(),
+    );
+  }
+
+  deleteTeacher(userId: Schema.Types.ObjectId) {
+    return from(this.userModel.findByIdAndDelete(userId).exec());
+  }
+
+  createTeacher(dto: CreateAdminDto): Observable<Omit<User, 'password'>> {
+    return from(this.userModel.findOne({ email: dto.email })).pipe(
+      switchMap((userExists) => {
+        if (userExists) {
+          throw new ForbiddenException(
+            this.localeService.translate('errors.email_exists'),
+          );
+        }
+        return from(bcrypt.hash(dto.password, 10)).pipe(
+          switchMap((hashedPassword) => {
+            return from(
+              this.userModel.create({
+                ...dto,
+                plan: Plans[dto.plan],
+                password: hashedPassword,
+                role: Role.TEACHER,
+              }),
+            ).pipe(
+              switchMap((createdUser) => {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { password, ...rest } = createdUser.toObject();
+                return of(rest);
+              }),
+            );
+          }),
+        );
+      }),
+    );
+  }
 
   createUser(
     userId: Schema.Types.ObjectId,
@@ -81,7 +133,7 @@ export class UserRepository {
       this.paginationService.paginate(this.userModel, pagination, {
         filter,
         sort: {
-          createdAt: -1,
+          updatedAt: -1,
         },
       }),
     );
@@ -118,8 +170,13 @@ export class UserRepository {
     return from(this.userModel.findByIdAndDelete(userId).exec());
   }
 
-  findOne(filter: Partial<User>): Observable<UserDocument> {
-    return from(this.userModel.findOne(filter).exec());
+  findOne(
+    filter: Partial<User>,
+    withPassword = false,
+  ): Observable<UserDocument> {
+    return from(
+      this.userModel.findOne(filter, undefined, { withPassword }).exec(),
+    );
   }
 
   findById(userId: Schema.Types.ObjectId): Observable<User> {
