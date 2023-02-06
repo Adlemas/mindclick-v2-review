@@ -1,10 +1,4 @@
-import {
-  IsEnum,
-  IsISO8601,
-  IsMongoId,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+import { IsEnum, IsISO8601, IsPhoneNumber, IsString } from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { Schema } from 'mongoose';
 import { PlanType } from 'src/enum/plan.enum';
@@ -49,7 +43,5 @@ export class CreateAdminDto {
   })
   plan: PlanType;
 
-  @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
-  @IsMongoId({ message: i18nValidationMessage('validation.NOT_MONGO_ID') })
   createdBy: Schema.Types.ObjectId;
 }
