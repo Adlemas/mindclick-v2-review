@@ -16,6 +16,7 @@ export type UserDocument = HydratedDocument<User>;
 @Schema({
   timestamps: {
     createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
   },
   toJSON: {
     virtuals: true,
@@ -183,6 +184,13 @@ export class User {
     default: now(),
   })
   createdAt: Date;
+
+  // updatedAt: Date;
+  @Prop({
+    type: Date,
+    default: null,
+  })
+  updatedAt: Date | null;
 
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
