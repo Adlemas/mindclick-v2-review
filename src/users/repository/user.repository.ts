@@ -161,7 +161,9 @@ export class UserRepository {
     filter: Partial<User>,
     withPassword = false,
   ): Observable<UserDocument> {
-    return from(this.userModel.findOne(filter, undefined, { withPassword }));
+    return from(
+      this.userModel.findOne(filter, undefined, { withPassword }).exec(),
+    );
   }
 
   findById(userId: Schema.Types.ObjectId): Observable<User> {
