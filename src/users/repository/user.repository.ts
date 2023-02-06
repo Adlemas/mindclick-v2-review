@@ -38,6 +38,10 @@ export class UserRepository {
     );
   }
 
+  deleteTeacher(userId: Schema.Types.ObjectId) {
+    return from(this.userModel.findByIdAndDelete(userId).exec());
+  }
+
   createTeacher(dto: CreateAdminDto): Observable<Omit<User, 'password'>> {
     return from(this.userModel.findOne({ email: dto.email })).pipe(
       switchMap((userExists) => {
