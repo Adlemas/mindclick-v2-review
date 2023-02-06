@@ -14,6 +14,8 @@ import { Rank } from 'src/users/interface/rank.interface';
 import { PaginationService } from 'src/pagination/pagination.service';
 import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 import { PaginatedResponse } from 'src/interface/paginated-response.interface';
+import { CreateAdminDto } from 'src/admin/dto/create-admin.dto';
+import Plans from 'src/constants/plans';
 
 @Injectable()
 export class UserRepository {
@@ -28,6 +30,17 @@ export class UserRepository {
 
   @Inject(PaginationService)
   private readonly paginationService: PaginationService;
+
+  createTeacher(dto: CreateAdminDto): Observable<User> {
+    return from(
+      this.userModel.create({
+        ...dto,
+        plan: Plans[dto.plan],
+
+        role: Role.TEACHER,
+      }),
+    );
+  }
 
   createUser(
     userId: Schema.Types.ObjectId,
