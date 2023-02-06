@@ -1,6 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Schema } from 'mongoose';
-import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 import { from, Observable, switchMap } from 'rxjs';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/schemas/user.schema';
@@ -8,6 +7,7 @@ import { PaginatedResponse } from 'src/interface/paginated-response.interface';
 import { CreateAdminDto } from 'src/admin/dto/create-admin.dto';
 import { UpdateAdminDto } from 'src/admin/dto/update-admin.dto';
 import { LocaleService } from 'src/locale/locale.service';
+import { GetAdminsQueryDto } from 'src/admin/dto/get-admins.dto';
 
 @Injectable()
 export class AdminService {
@@ -64,7 +64,7 @@ export class AdminService {
 
   getUsers(
     user: Observable<User>,
-    pagination: PaginationQueryDto,
+    pagination: GetAdminsQueryDto,
   ): Observable<PaginatedResponse<Array<User>>> {
     return from(user).pipe(
       switchMap((user) => {
@@ -72,6 +72,17 @@ export class AdminService {
           this.usersService.find(
             {
               createdBy: user._id,
+              ...(pagination.query && {
+                $or: [
+                  { name: { $regex: pagination.query, $options: 'i' } },
+                  { email: { $regex: pagination.query, $options: 'i' } },
+                  { phone: { $regex: pagination.query, $options: 'i' } },
+                ],
+              }),
+              ...(pagination.status && { status: pagination.status }),
+              ...(pagination.plan && {
+                'plan.id': pagination.plan,
+              }),
             },
             pagination,
           ),

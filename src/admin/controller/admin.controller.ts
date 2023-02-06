@@ -14,13 +14,13 @@ import {
 import { AdminService } from 'src/admin/service/admin.service';
 import { AccessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { AdminUserGuard } from 'src/users/guard/admin.guard';
-import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 import { CreateAdminDto } from 'src/admin/dto/create-admin.dto';
 import {
   UpdateAdminDto,
   UpdateAdminParamsDto,
 } from 'src/admin/dto/update-admin.dto';
 import { DeleteAdminParamsDto } from 'src/admin/dto/delete-admin.dto';
+import { GetAdminsQueryDto } from 'src/admin/dto/get-admins.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -29,8 +29,8 @@ export class AdminController {
 
   @UseGuards(AccessTokenGuard, AdminUserGuard)
   @Get('users')
-  getUsers(@Req() req, @Query() paginationDto: PaginationQueryDto) {
-    return this.adminService.getUsers(req.user, paginationDto);
+  getUsers(@Req() req, @Query() dto: GetAdminsQueryDto) {
+    return this.adminService.getUsers(req.user, dto);
   }
 
   @UseGuards(AccessTokenGuard, AdminUserGuard)
