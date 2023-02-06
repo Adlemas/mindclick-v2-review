@@ -16,6 +16,7 @@ import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 import { PaginatedResponse } from 'src/interface/paginated-response.interface';
 import { CreateAdminDto } from 'src/admin/dto/create-admin.dto';
 import Plans from 'src/constants/plans';
+import { UpdateAdminDto } from 'src/admin/dto/update-admin.dto';
 
 @Injectable()
 export class UserRepository {
@@ -30,6 +31,12 @@ export class UserRepository {
 
   @Inject(PaginationService)
   private readonly paginationService: PaginationService;
+
+  updateTeacher(userId: Schema.Types.ObjectId, dto: UpdateAdminDto) {
+    return from(
+      this.userModel.findByIdAndUpdate(userId, dto, { new: true }).exec(),
+    );
+  }
 
   createTeacher(dto: CreateAdminDto): Observable<Omit<User, 'password'>> {
     return from(this.userModel.findOne({ email: dto.email })).pipe(
