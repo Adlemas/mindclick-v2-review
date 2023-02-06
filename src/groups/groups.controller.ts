@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -21,6 +22,7 @@ import {
   RemoveGroupDto,
   RemoveGroupParamsDto,
 } from 'src/groups/dto/remove-group.dto';
+import { GetMembersDto } from 'src/groups/dto/get-members.dto';
 
 @Controller('groups')
 export class GroupsController {
@@ -31,7 +33,13 @@ export class GroupsController {
   @UseGuards(AccessTokenGuard, RolesGuard)
   @Post()
   addGroup(@Req() req, @Body() createGroupDto: CreateGroupDto) {
-    return this.groupsService.addGroup(createGroupDto, req.user);
+    return this.groupsService.addGroup(
+      {
+        name: createGroupDto.name,
+        color: createGroupDto.color,
+      },
+      req.user,
+    );
   }
 
   @UseGuards(AccessTokenGuard)
@@ -42,11 +50,19 @@ export class GroupsController {
 
   @Roles(Role.TEACHER)
   @UseGuards(AccessTokenGuard, RolesGuard)
+  @Get('members')
+  getMembers(@Req() req, @Query() dto: GetMembersDto) {
+    return this.groupsService.getMembers(req.user, dto);
+  }
+
+  @Roles(Role.TEACHER)
+  @UseGuards(AccessTokenGuard, RolesGuard)
   @Put()
   updateGroup(@Req() req, @Body() updateGroupDto: UpdateGroupDto) {
     return this.groupsService.updateGroupByOwner(req.user, {
       groupId: updateGroupDto.groupId,
       name: updateGroupDto.name,
+      color: updateGroupDto.color,
     });
   }
 

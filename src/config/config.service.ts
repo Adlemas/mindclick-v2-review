@@ -87,7 +87,7 @@ export class ConfigService {
   }
 
   getLang(): string {
-    return this.get('LANG', false) || 'ru';
+    return this.get('APP_LANG', false) || 'ru';
   }
 }
 

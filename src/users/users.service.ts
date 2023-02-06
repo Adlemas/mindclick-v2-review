@@ -3,11 +3,12 @@ import { User } from 'src/schemas/user.schema';
 import { from, Observable, of, switchMap } from 'rxjs';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { UserRepository } from 'src/users/repository/user.repository';
-import { isValidObjectId, Schema } from 'mongoose';
+import { FilterQuery, isValidObjectId, Schema } from 'mongoose';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LocaleService } from 'src/locale/locale.service';
 import { Role } from 'src/enum/role.enum';
 import { Rank } from 'src/users/interface/rank.interface';
+import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
 
 @Injectable()
 export class UsersService {
@@ -19,6 +20,10 @@ export class UsersService {
 
   findOne(filter: Partial<User>) {
     return this.userRepository.findOne(filter);
+  }
+
+  find(filter: FilterQuery<User>, pagination: PaginationQueryDto) {
+    return this.userRepository.getWithPagination(filter, pagination);
   }
 
   findById(userId: Schema.Types.ObjectId) {

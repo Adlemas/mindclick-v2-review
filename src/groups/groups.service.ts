@@ -15,6 +15,8 @@ import { RemoveGroupDto } from 'src/groups/dto/remove-group.dto';
 import { UsersService } from 'src/users/users.service';
 import { LocaleService } from 'src/locale/locale.service';
 import { Role } from 'src/enum/role.enum';
+import { GetMembersDto } from 'src/groups/dto/get-members.dto';
+import escapeRegExp from 'src/utils/escapeRegExp';
 
 @Injectable()
 export class GroupsService {
@@ -45,7 +47,7 @@ export class GroupsService {
           return this.groupRepository.getUserGroups(user._id);
         }
         if (user.role === Role.STUDENT) {
-          return this.groupRepository.getGroup(user.group);
+          return this.groupRepository.getGroup(user.groupId);
         }
         throw new ForbiddenException(
           this.localeService.translate('errors.forbidden'),
@@ -107,6 +109,40 @@ export class GroupsService {
               }),
             );
           }),
+        );
+      }),
+    );
+  }
+
+  getMembers(user: Observable<User>, dto: GetMembersDto) {
+    const { groupId, ...pagination } = dto;
+    return this.getUserGroups(user).pipe(
+      switchMap((groups: Array<Group>) => {
+        return this.usersService.find(
+          {
+            groupId: groupId
+              ? groupId
+              : { $in: groups.map((group) => group._id) },
+            ...(dto.query
+              ? {
+                  $or: [
+                    {
+                      email: new RegExp(escapeRegExp(dto.query), 'i'),
+                    },
+                    {
+                      firstName: new RegExp(escapeRegExp(dto.query), 'i'),
+                    },
+                    {
+                      lastName: new RegExp(escapeRegExp(dto.query), 'i'),
+                    },
+                    {
+                      phone: new RegExp(escapeRegExp(dto.query), 'i'),
+                    },
+                  ],
+                }
+              : {}),
+          },
+          pagination,
         );
       }),
     );

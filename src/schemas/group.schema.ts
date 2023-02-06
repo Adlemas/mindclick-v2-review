@@ -21,6 +21,16 @@ export class Group {
   })
   maxMembers: number;
 
+  /**
+   * Color of the group
+   * default is null
+   */
+  @Prop({
+    type: String,
+    default: undefined,
+  })
+  color?: string;
+
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     required: true,

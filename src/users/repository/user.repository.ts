@@ -1,7 +1,7 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from 'src/schemas/user.schema';
-import { Model, Schema } from 'mongoose';
+import { FilterQuery, Model, Schema } from 'mongoose';
 import { from, Observable, of, switchMap } from 'rxjs';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -11,6 +11,9 @@ import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enum/role.enum';
 import { Group } from 'src/schemas/group.schema';
 import { Rank } from 'src/users/interface/rank.interface';
+import { PaginationService } from 'src/pagination/pagination.service';
+import { PaginationQueryDto } from 'src/pagination/dto/pagination-query.dto';
+import { PaginatedResponse } from 'src/interface/paginated-response.interface';
 
 @Injectable()
 export class UserRepository {
@@ -22,6 +25,9 @@ export class UserRepository {
 
   @Inject(LocaleService)
   private readonly localeService: LocaleService;
+
+  @Inject(PaginationService)
+  private readonly paginationService: PaginationService;
 
   createUser(
     userId: Schema.Types.ObjectId,
@@ -50,7 +56,7 @@ export class UserRepository {
                     ...createUserDto,
                     password: hashedPassword,
                     role: Role.STUDENT,
-                    group: group._id,
+                    groupId: group._id,
                   }),
                 ).pipe(
                   switchMap((createdUser) => {
@@ -63,6 +69,20 @@ export class UserRepository {
             );
           }),
         );
+      }),
+    );
+  }
+
+  getWithPagination(
+    filter: FilterQuery<User>,
+    pagination: PaginationQueryDto,
+  ): Observable<PaginatedResponse<Array<User>>> {
+    return from(
+      this.paginationService.paginate(this.userModel, pagination, {
+        filter,
+        sort: {
+          createdAt: -1,
+        },
       }),
     );
   }
@@ -80,7 +100,7 @@ export class UserRepository {
             this.localeService.translate('errors.forbidden'),
           );
         }
-        return from(this.groupRepository.findGroupById(user.group)).pipe(
+        return from(this.groupRepository.findGroupById(user.groupId)).pipe(
           switchMap((group) => {
             if (!group) {
               throw new ForbiddenException(
@@ -123,7 +143,7 @@ export class UserRepository {
     return from(
       this.userModel
         .count({
-          group: groupId,
+          groupId: groupId,
         })
         .exec(),
     );
@@ -145,7 +165,8 @@ export class UserRepository {
           switchMap((groups) => {
             if (
               !groups.some(
-                (group) => group._id.toString() === targetUser.group.toString(),
+                (group) =>
+                  group._id.toString() === targetUser.groupId.toString(),
               ) ||
               !groups.some(
                 (group) => group._id.toString() === groupId.toString(),
@@ -195,7 +216,7 @@ export class UserRepository {
           this.userModel
             .updateMany(
               {
-                group: groupId,
+                groupId: groupId,
               },
               {
                 group: targetGroupId,
@@ -218,7 +239,7 @@ export class UserRepository {
     return from(
       this.userModel
         .find(
-          { group: { $in: groups.map((g) => g._id) } },
+          { groupId: { $in: groups.map((g) => g._id) } },
           { rate: 1, points: 1 },
         )
         .exec(),

@@ -12,6 +12,8 @@ import { UnauthorizedExceptionFilter } from 'src/filters/unauthorized-exception.
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors();
+
   app.use(I18nMiddleware);
 
   app.useGlobalFilters(
