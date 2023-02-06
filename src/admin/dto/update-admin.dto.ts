@@ -7,11 +7,12 @@ import {
 } from 'class-validator';
 import { PlanType } from 'src/enum/plan.enum';
 import { i18nValidationMessage } from 'nestjs-i18n';
+import { Schema } from 'mongoose';
 
 export class UpdateAdminParamsDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsMongoId({ message: i18nValidationMessage('validation.NOT_MONGO_ID') })
-  id: string;
+  id: Schema.Types.ObjectId;
 }
 
 export class UpdateAdminDto {
