@@ -48,9 +48,18 @@ export class AdminService {
     );
   }
 
-  deleteUser() {
-    // TODO: Implement
-    return 'deleteUser';
+  deleteUser(user: Observable<User>, userId: Schema.Types.ObjectId) {
+    return this.getUser(user, userId).pipe(
+      switchMap((user) => {
+        if (!user) {
+          throw new NotFoundException(
+            this.localeService.translate('errors.not_found'),
+          );
+        }
+
+        return from(this.usersService.deleteTeacher(user._id));
+      }),
+    );
   }
 
   getUsers(
