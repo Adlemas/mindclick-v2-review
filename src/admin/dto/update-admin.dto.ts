@@ -1,7 +1,9 @@
 import {
+  IsBoolean,
   IsEnum,
   IsISO8601,
   IsMongoId,
+  IsOptional,
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
@@ -17,35 +19,47 @@ export class UpdateAdminParamsDto {
 
 export class UpdateAdminDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
-  firstName: string;
+  @IsOptional()
+  firstName?: string;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
-  lastName: string;
+  @IsOptional()
+  lastName?: string;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsPhoneNumber(undefined, {
     message: i18nValidationMessage('validation.NOT_PHONE_NUMBER'),
   })
-  phone: string;
+  @IsOptional()
+  phone?: string;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsISO8601(
     { strict: true },
     { message: i18nValidationMessage('validation.NOT_DATE') },
   )
-  birthDate: string;
+  @IsOptional()
+  birthDate?: string;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
-  description: string;
+  @IsOptional()
+  description?: string;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
-  city: string;
+  @IsOptional()
+  city?: string;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
-  address: string;
+  @IsOptional()
+  address?: string;
 
   @IsEnum(PlanType, {
     message: i18nValidationMessage('validation.NOT_ENUM'),
   })
-  plan: PlanType;
+  @IsOptional()
+  plan?: PlanType;
+
+  @IsBoolean({ message: i18nValidationMessage('validation.NOT_BOOLEAN') })
+  @IsOptional()
+  status?: boolean;
 }
