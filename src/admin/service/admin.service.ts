@@ -5,15 +5,24 @@ import { from, Observable, switchMap } from 'rxjs';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/schemas/user.schema';
 import { PaginatedResponse } from 'src/interface/paginated-response.interface';
+import { CreateAdminDto } from 'src/admin/dto/create-admin.dto';
 
 @Injectable()
 export class AdminService {
   @Inject(UsersService)
   private readonly usersService: UsersService;
 
-  createUser() {
-    // TODO: Implement
-    return 'createUser';
+  createUser(user: Observable<User>, dto: CreateAdminDto) {
+    return from(user).pipe(
+      switchMap((user) => {
+        return from(
+          this.usersService.createTeacher({
+            ...dto,
+            createdBy: user._id,
+          }),
+        );
+      }),
+    );
   }
 
   updateUser() {
