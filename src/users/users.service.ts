@@ -134,6 +134,10 @@ export class UsersService {
     return this.userRepository.updateTeacher(userId, dto);
   }
 
+  deleteTeacher(userId: Schema.Types.ObjectId) {
+    return this.userRepository.deleteTeacher(userId);
+  }
+
   createTeacher(dto: CreateAdminDto) {
     return this.userRepository.createTeacher(dto);
   }
