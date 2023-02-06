@@ -1,6 +1,18 @@
-import { IsEnum, IsISO8601, IsPhoneNumber, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsISO8601,
+  IsMongoId,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
 import { PlanType } from 'src/enum/plan.enum';
 import { i18nValidationMessage } from 'nestjs-i18n';
+
+export class UpdateAdminParamsDto {
+  @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
+  @IsMongoId({ message: i18nValidationMessage('validation.NOT_MONGO_ID') })
+  id: string;
+}
 
 export class UpdateAdminDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
