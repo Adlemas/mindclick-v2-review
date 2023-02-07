@@ -13,6 +13,7 @@ import { PaginationModule } from './pagination/pagination.module';
 import { MonetizationModule } from './monetization/monetization.module';
 import { StorageModule } from './storage/storage.module';
 import { AdminModule } from './admin/admin.module';
+import { CitySearchModule } from './city-search/city-search.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AdminModule } from './admin/admin.module';
     MonetizationModule,
     StorageModule,
     AdminModule,
+    CitySearchModule,
   ],
   providers: [AppService],
 })
