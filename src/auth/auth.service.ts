@@ -69,10 +69,14 @@ export class AuthService {
     );
   }
 
-  login(user: LoginDto): Observable<Tokens> {
-    return from(this.validateUser(user.email, user.password)).pipe(
+  login(loginDto: LoginDto): Observable<Tokens> {
+    return from(this.validateUser(loginDto.email, loginDto.password)).pipe(
       switchMap((user) => {
-        return this.getTokens(user._id, user.email).pipe(
+        return this.getTokens(
+          user._id,
+          user.email,
+          loginDto.rememberMe ?? false,
+        ).pipe(
           switchMap((tokens) => {
             return this.updateRefreshToken(user._id, tokens.refreshToken).pipe(
               switchMap(() => {
@@ -88,6 +92,7 @@ export class AuthService {
   refreshTokens(
     userId: Schema.Types.ObjectId,
     refreshToken: string,
+    rememberMe: boolean,
   ): Observable<Tokens> {
     return from(this.usersService.findById(userId)).pipe(
       switchMap((user) => {
@@ -101,7 +106,7 @@ export class AuthService {
             if (!matches) {
               throw new ForbiddenException('errors.forbidden');
             }
-            return this.getTokens(user._id, user.email).pipe(
+            return this.getTokens(user._id, user.email, rememberMe).pipe(
               switchMap((tokens) => {
                 return this.updateRefreshToken(
                   user._id,
@@ -125,7 +130,11 @@ export class AuthService {
     );
   }
 
-  getTokens(userId: Schema.Types.ObjectId, email: string): Observable<Tokens> {
+  getTokens(
+    userId: Schema.Types.ObjectId,
+    email: string,
+    rememberMe: boolean,
+  ): Observable<Tokens> {
     return from(
       Promise.all([
         this.jwtService.signAsync(
@@ -142,10 +151,13 @@ export class AuthService {
           {
             sub: userId,
             email,
+            rememberMe: rememberMe,
           },
           {
             secret: configService.getRefreshJwtSecret(),
-            expiresIn: configService.getRefreshTokenExpiresIn(),
+            expiresIn: rememberMe
+              ? configService.getRefreshTokenRememberMeExpiresIn()
+              : configService.getRefreshTokenExpiresIn(),
           },
         ),
       ]),
