@@ -20,6 +20,9 @@ export class CitySearchService {
           },
         })
         .limit(dto.limit ?? 20)
+        .sort({
+          city: -1,
+        })
         .exec(),
     );
   }
