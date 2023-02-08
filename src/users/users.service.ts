@@ -103,7 +103,10 @@ export class UsersService {
         }),
       );
     }
-    return this.userRepository.updateById(user._id, user);
+    return this.userRepository.updateById(user._id, {
+      ...user,
+      city: user.city as any,
+    });
   }
 
   updateByIdWithoutGroup(

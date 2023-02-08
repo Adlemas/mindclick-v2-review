@@ -2,6 +2,7 @@ import mongoose, {
   HydratedDocument,
   now,
   Schema as MongooseSchema,
+  Document,
 } from 'mongoose';
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Role } from 'src/enum/role.enum';

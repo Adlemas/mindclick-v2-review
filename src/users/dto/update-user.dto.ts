@@ -6,11 +6,13 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  ValidateNested,
 } from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { Type } from 'class-transformer';
 import { Schema } from 'mongoose';
 import { Monetization } from 'src/interface/monetization.interface';
+import { CityDto } from 'src/interface/city.dto';
 
 export class UpdateUserParamDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
@@ -42,9 +44,10 @@ export class UpdateUserDto {
   @IsOptional()
   description?: string;
 
-  @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsOptional()
-  city?: string;
+  @Type(() => CityDto)
+  @ValidateNested()
+  city?: CityDto;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   @IsOptional()
