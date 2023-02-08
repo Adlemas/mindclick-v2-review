@@ -1,7 +1,15 @@
-import { IsEnum, IsISO8601, IsPhoneNumber, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsISO8601,
+  IsPhoneNumber,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { Schema } from 'mongoose';
 import { PlanType } from 'src/enum/plan.enum';
+import { Type } from 'class-transformer';
+import { CityDto } from 'src/interface/city.dto';
 
 export class CreateAdminDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
@@ -32,8 +40,9 @@ export class CreateAdminDto {
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   description: string;
 
-  @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
-  city: string;
+  @Type(() => CityDto)
+  @ValidateNested()
+  city: CityDto;
 
   @IsString({ message: i18nValidationMessage('validation.NOT_STRING') })
   address: string;
