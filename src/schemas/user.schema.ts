@@ -10,8 +10,25 @@ import { Monetization } from 'src/interface/monetization.interface';
 import { Plan } from 'src/interface/plan.interface';
 import { Group } from 'src/schemas/group.schema';
 import { Type } from 'class-transformer';
+import { City } from 'src/schemas/city.schema';
 
 export type UserDocument = HydratedDocument<User>;
+
+export class CityDocument extends Document {
+  // _id - string
+  @Prop({
+    type: String,
+    required: true,
+  })
+  _id: string;
+
+  // city - string
+  @Prop({
+    type: String,
+    required: true,
+  })
+  city: string;
+}
 
 @Schema({
   timestamps: {
@@ -117,10 +134,12 @@ export class User {
   description: string | null;
 
   @Prop({
-    type: String,
+    type: CityDocument,
     default: null,
+    // disable _id rendering in city
+    _id: false,
   })
-  city: string | null;
+  city: City | null;
 
   @Prop({
     type: String,
