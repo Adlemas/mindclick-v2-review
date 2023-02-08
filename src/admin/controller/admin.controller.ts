@@ -36,7 +36,19 @@ export class AdminController {
   @UseGuards(AccessTokenGuard, AdminUserGuard)
   @Post('users')
   createUser(@Req() req, @Body() dto: CreateAdminDto) {
-    return this.adminService.createUser(req.user, dto);
+    return this.adminService.createUser(req.user, {
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      address: dto.address,
+      city: dto.city,
+      birthDate: dto.birthDate,
+      plan: dto.plan,
+      description: dto.description,
+      phone: dto.phone,
+      email: dto.email,
+      password: dto.password,
+      createdBy: null as any,
+    });
   }
 
   @UseGuards(AccessTokenGuard, AdminUserGuard)
